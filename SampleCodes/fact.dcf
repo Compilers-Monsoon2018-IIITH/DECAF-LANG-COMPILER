@@ -1,18 +1,22 @@
 class Factorial
 {
-	int main(int n)
+	int factorial(int n)
 	{
 		int ans;
 		ans=1;
-		for(i=2)
+		for i=2,n-1
 		{
-			if(i>n)
-			{
-				break;
-			}
 			ans=ans*i;
-			i=i+1;
 		}
 		return ans;
-	}	
+	}
+	int main()
+	{
+		int n;
+		callout("scanf","%d",&n);
+		int f;
+		f=callout("factorial",n);
+		callout("printf","%d",n);
+		return 0;
+	}
 }

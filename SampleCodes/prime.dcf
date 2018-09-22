@@ -1,16 +1,31 @@
 Class Prime
 {
-	bool main(int n)
+	bool prime(int n)
 	{
 		int i;
-		for(i=2)
+		for i=2,n-1
 		{
 			if(n%i==0)
 			{
 				return False;
 			}
-			i+=1;
 		}
 		return True;
+	}
+	int main()
+	{
+		int n;
+		callout("scanf","%d",&n);
+		bool ans;
+		ans=callout(prime,n);
+		if(ans)
+		{
+			callout("printf","NUMBER IS PRIME");
+		}
+		else
+		{
+			callout("printf","NUMBER IS NOT PRIME");
+		}
+		return 0;
 	}
 }

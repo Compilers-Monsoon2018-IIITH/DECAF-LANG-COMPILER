@@ -1,13 +1,26 @@
 Class Even
 {
-	void main(int arr[],int size)
+	void even(int arr[],int size)
 	{
 		int i;
-		for(i=0)
-		{
-			print("%d",&arr[i]);
-			i+=1;
+		for i=0,size-1
+		{	if(i%2==0)
+			{
+				callout("printf","%d",arr[i]);
+			}
 		}
 		return;
+	}
+	int main()
+	{
+		int n;
+		callout("scanf","%d",&n);
+		int arr[n];
+		for i=0,n-1
+		{
+			callout("scanf","%d",&arr[i]);
+		}
+		callout("even",arr,n);
+		return 0;
 	}
 }
