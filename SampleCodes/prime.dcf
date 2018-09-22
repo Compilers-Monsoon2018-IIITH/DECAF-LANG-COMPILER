@@ -1,0 +1,16 @@
+Class Prime
+{
+	bool main(int n)
+	{
+		int i;
+		for(i=2)
+		{
+			if(n%i==0)
+			{
+				return False;
+			}
+			i+=1;
+		}
+		return True;
+	}
+}

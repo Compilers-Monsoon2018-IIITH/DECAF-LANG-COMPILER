@@ -1,0 +1,15 @@
+Class Hanoi
+{
+	void main(int n,char from,char to,char aux)
+	{
+		if(n==1)
+		{
+			printf("From %c to %c",from,to);
+		}
+		else
+		{
+			main(n-1,from,to,aux);
+			printf("From %c from to %c aux");
+		}
+	}
+}

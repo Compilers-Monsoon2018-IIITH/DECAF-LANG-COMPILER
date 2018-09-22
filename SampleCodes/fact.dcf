@@ -2,7 +2,8 @@ class Factorial
 {
 	int main(int n)
 	{
-		int ans=1;
+		int ans;
+		ans=1;
 		for(i=2)
 		{
 			if(i>n)

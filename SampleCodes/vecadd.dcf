@@ -1,0 +1,18 @@
+Class VecAdd
+{
+	int [] main(int vec1[], int vec2[],int size)
+	{
+		int i;
+		int sum_vec[size];
+		for(i=0)
+		{
+			if(i>=size)
+			{
+				break;
+			}
+			sum_vec[i]=vec1[i]+vec2[i];
+			i+=1;
+		}
+		return sum_vec;
+	}
+}
