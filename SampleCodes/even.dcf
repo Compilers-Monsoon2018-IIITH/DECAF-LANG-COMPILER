@@ -1,4 +1,4 @@
-Class Even
+Class Program
 {
 	void even(int arr[],int size)
 	{

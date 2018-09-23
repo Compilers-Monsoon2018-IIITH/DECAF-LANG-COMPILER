@@ -1,4 +1,4 @@
-Class VecAdd
+Class Program
 {
 	void vecadd(int vec1[], int vec2[],int size, int sum_vec[])
 	{

@@ -1,4 +1,4 @@
-Class Prime
+Class Program
 {
 	bool prime(int n)
 	{

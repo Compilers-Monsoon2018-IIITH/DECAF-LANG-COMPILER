@@ -1,4 +1,4 @@
-Class Hanoi
+Class Program
 {
 	void hanoi(int n,char from,char to,char aux)
 	{

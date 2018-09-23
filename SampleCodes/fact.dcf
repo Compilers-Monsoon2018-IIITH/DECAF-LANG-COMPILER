@@ -1,4 +1,4 @@
-class Factorial
+class Program
 {
 	int factorial(int n)
 	{

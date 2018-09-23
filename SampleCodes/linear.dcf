@@ -1,4 +1,4 @@
-Class Linear
+Class Program
 {
 	int linear(int elem, int arr[], int size)
 	{
