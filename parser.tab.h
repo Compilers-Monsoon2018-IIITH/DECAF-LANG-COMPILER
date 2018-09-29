@@ -46,13 +46,22 @@ extern int yydebug;
   enum yytokentype
   {
     id = 258,
-    dec = 259,
-    hex = 260,
-    bool = 261,
-    lt = 262,
-    le = 263,
-    gt = 264,
-    ge = 265
+    char_lit = 259,
+    str_lit = 260,
+    dec = 261,
+    hex = 262,
+    true = 263,
+    false = 264,
+    lt = 265,
+    le = 266,
+    gt = 267,
+    ge = 268,
+    eq = 269,
+    ass = 270,
+    not = 271,
+    neq = 272,
+    or = 273,
+    and = 274
   };
 #endif
 

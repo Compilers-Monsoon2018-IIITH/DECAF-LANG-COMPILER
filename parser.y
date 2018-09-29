@@ -3,20 +3,31 @@
 %}
 
 %token id
+%token char_lit
+%token str_lit
 %token dec
 %token hex
-%token bool
-%token lt le gt ge
+%token true
+%token false
+%token lt le gt ge eq ass not neq
+%token or and
 
 %left '+' '-'
 %left '*' '/' '%'
 %left lt le
 %left gt ge
+%left not neq
+%left eq ass
+%left str_lit id true false
 
 %%
 
+callout_arg  : expr
+             | str_lit
+             ;
+
 expr : '(' expr ')'
-	 |  '!' expr
+	 |  not expr
 	 |  '-' expr
 	 |  expr bin_op expr
 	 |  literal
@@ -42,29 +53,35 @@ rel_op : gt
 	 |  le
 	 ;
 
-eq_op : "=="
-	 |  "!="
+eq_op : eq
+	 |  neq
 	 ;
 
-cond_op : "&&"
-	 |  "||"
+cond_op : and
+	 |  or
 	 ;
 
 literal : int_literal
-	 |  "char"
-	 |  bool
+	 |  char_lit
+	 |  bool_literal
 	 ;
 
 int_literal : dec
 	 |  hex
 	 ;
 
+bool_literal : true
+	 |  false
+	 ;
 
 %%
 
 main(int argc, char **argv)
 {
-	yyparse();
+	while(true)
+	{
+		yyparse();
+	}
 	printf("Parsing Over\n");
 }
 
