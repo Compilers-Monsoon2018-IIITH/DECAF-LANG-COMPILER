@@ -6,12 +6,13 @@
 %token dec
 %token hex
 %token bool
+%token lt le gt ge
+
 %left '+' '-'
 %left '*' '/' '%'
-%precedence "<="
-%precedence ">="
-%precedence "=="
-%precedence "true"
+%left lt le
+%left gt ge
+
 %%
 
 expr : '(' expr ')'
@@ -35,10 +36,10 @@ arith_op : '+'
 	 |  '%'
 	 ;
 
-rel_op : "gt"
-	 |  "lt"
-	 |  "ge"
-	 |  "le"
+rel_op : gt
+	 |  lt
+	 |  ge
+	 |  le
 	 ;
 
 eq_op : "=="
@@ -51,15 +52,11 @@ cond_op : "&&"
 
 literal : int_literal
 	 |  "char"
-	 |  bool_literal
+	 |  bool
 	 ;
 
 int_literal : dec
 	 |  hex
-	 ;
-
-bool_literal : 't'
-	 |  'f'
 	 ;
 
 

@@ -48,7 +48,11 @@ extern int yydebug;
     id = 258,
     dec = 259,
     hex = 260,
-    bool = 261
+    bool = 261,
+    lt = 262,
+    le = 263,
+    gt = 264,
+    ge = 265
   };
 #endif
 
