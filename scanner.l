@@ -4,9 +4,9 @@ int lineno = 0;
 %}
 
 %%
-[i][n][t]				{printf("int type "); return int_type;}
-[v][o][i][d]			{printf("void type "); return void_type;}
-[b][o][o][l]			{printf("bool type "); return bool_type;}
+[i][n][t]				{printf("int_type "); return int_type;}
+[v][o][i][d]			{printf("void_type "); return void_type;}
+[b][o][o][l]			{printf("bool_type "); return bool_type;}
 [i][f]					{printf("if keyword "); return if_keyword;}
 [e][l][s][e]			{printf("else keyword "); return else_keyword;}
 [f][o][r]				{printf("for keyword "); return for_keyword;}

@@ -821,17 +821,17 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 7 "scanner.l"
-{printf("int type "); return int_type;}
+{printf("int_type "); return int_type;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 8 "scanner.l"
-{printf("void type "); return void_type;}
+{printf("void_type "); return void_type;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
 #line 9 "scanner.l"
-{printf("bool type "); return bool_type;}
+{printf("bool_type "); return bool_type;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP

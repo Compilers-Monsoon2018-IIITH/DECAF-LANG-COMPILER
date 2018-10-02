@@ -28,9 +28,13 @@
 
 %%
 program : class_def prog '{' '}'
-		| class_def prog '{' field_decls '}'
-		| class_def prog '{' method_decls '}'
-		| class_def prog '{' field_decls method_decls '}'
+		| class_def prog '{' fields '}'
+		;
+
+fields  : method_decls fields
+		| field_decls fields
+		| method_decls
+		| field_decls
 		;
 
 field_decls : field_decl field_decls
@@ -80,8 +84,9 @@ ids	: id
 	| id ',' ids
 	;
 
-method_type : type
+method_type : int_type
 			| void_type
+			| bool_type
 			;
 
 type 		: int_type
