@@ -1,8 +1,9 @@
 Class Program
 {
-	void even(int arr[],int size)
+	int arr[100]
+	void even(int size)
 	{
-		int i;
+		int i
 		for i=0,size-1
 		{	if(i%2==0)
 			{
@@ -13,14 +14,14 @@ Class Program
 	}
 	int main()
 	{
-		int n;
-		callout("scanf","%d",&n);
-		int arr[n];
+		int n
+		callout("scanf","%d",&n)
+		int arr[n]
 		for i=0,n-1
 		{
-			callout("scanf","%d",&arr[i]);
+			callout("scanf","%d",&arr[i])
 		}
-		callout("even",arr,n);
-		return 0;
+		callout("even",arr,n)
+		return 0
 	}
 }

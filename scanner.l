@@ -10,10 +10,10 @@ int lineno = 0;
 [i][f]					{printf("if keyword "); return if_keyword;}
 [e][l][s][e]			{printf("else keyword "); return else_keyword;}
 [f][o][r]				{printf("for keyword "); return for_keyword;}
-[r][e][t][u][r][n]		{printf("return keyword "); return return_keyword;}
-[b][r][e][a][k]			{printf("break keyword "); return break_keyword;}
-[c][a][l][l][o][u][t]	{printf("callout keyword "); return callout_keyword;}
-[c][o][n][t][i][n][u][e] {printf("continue keyword "); return continue_keyword;}
+[r][e][t][u][r][n]		{printf("return_keyword "); return return_keyword;}
+[b][r][e][a][k]			{printf("break_keyword "); return break_keyword;}
+[c][a][l][l][o][u][t]	{printf("callout_keyword "); return callout_keyword;}
+[c][o][n][t][i][n][u][e] {printf("continue_keyword "); return continue_keyword;}
 "class"					{printf("class "); return class_def;}
 "Program"				{printf("program "); return prog;}
 [t][r][u][e]			{printf("true "); return true;}
@@ -47,6 +47,7 @@ int lineno = 0;
 "{"						{printf("openp "); return '{';}
 "}"						{printf("closep "); return '}';}
 ","						{printf("comma "); return ',';}
+";"						{printf("semi-colon "); return ';';}
 [ \t]					{ }
 \n		     			{++lineno;printf("\n");}
 .						{ printf("Line No %d: Unrecognized Character\n", lineno); }

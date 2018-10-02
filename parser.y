@@ -18,12 +18,12 @@
 %token pe me
 %token callout_keyword
 
-%left '+' '-' pe me
+%left eq ass pe me
+%left '+' '-'
 %left '*' '/' '%'
 %left lt le
 %left gt ge
 %left not neq
-%left eq ass
 %left str_lit id true false int_type void_type bool_type if_keyword for_keyword return_keyword break_keyword continue_keyword else_keyword callout_keyword
 
 %%
@@ -31,77 +31,77 @@ program : class_def prog '{' '}'
 		| class_def prog '{' fields '}'
 		;
 
-fields  : method_decls fields
-		| field_decls fields
+fields  : field_decls 
 		| method_decls
-		| field_decls
+		| field_decls method_decls
 		;
 
-field_decls : field_decl field_decls
-			| field_decl
+field_decls : field_decls field_decl ';'
+			| field_decl ';'
 			;
 
 field_decl : type list_id
 		   ;
 
-list_id : id
+list_id   : id
 		  | id '[' int_literal ']'
-		  | id ',' list_id
-		  | id '[' int_literal ']' ',' list_id
+		  | list_id ',' id
+		  | list_id ',' id '[' int_literal ']'
 
-method_decls : method_decl method_decls
+method_decls : method_decls method_decl
 			 | method_decl
 			 ;
 
-method_decl  : method_type id '(' ')' block
-			 | method_type id '(' inputs ')' block
+method_decl  : type id '(' ')' block
+			 | type id '(' inputs ')' block
+			 | void_type id '(' ')' block
+			 | void_type id '(' inputs ')' block
 			 ;
 
 inputs	: input
-		| input ',' inputs
+		| inputs ',' input
 		;
 
 input 	: type id
 		; 
 
-block	: '{' var_declarations statements '}'
+block	: '{' block_parts '}'
+		| '{' '}'
 		;
 
-var_declarations : var_declaration
-				 | var_declaration var_declarations
-				 |
+block_parts : var_declarations statements
+			| statements
+			| var_declarations
+			;
+
+var_declarations : var_declaration ';'
+				 | var_declarations var_declaration ';'
 				 ;
 
 statements	: statement
-			| statement statements
-			|
+			| statements statement
 			;
 
 var_declaration : type ids
 				;
 
 ids	: id
-	| id ',' ids
+	| ids ',' id
 	;
-
-method_type : int_type
-			| void_type
-			| bool_type
-			;
 
 type 		: int_type
 			| bool_type
 			;
 
-statement 	: location assign_op expr
-			| method_call
+statement 	: location assign_op expr ';'
+			| method_call ';'
 			| if_keyword '(' expr ')' block
-			| if_keyword '(' expr ')' else_keyword block
+			| if_keyword '(' expr ')' block else_keyword block
 			| for_keyword id ass expr ',' expr block
-			| return_keyword
-			| return_keyword expr
-			| break_keyword
-			| continue_keyword
+			| return_keyword ';'
+			| return_keyword expr ';'
+			| break_keyword ';'
+			| continue_keyword ';'
 			| block
 			;
 
@@ -124,15 +124,15 @@ location 	: id
 			| id '[' expr ']'
 
 exprs		: expr
-			| expr ',' exprs
+			| exprs ',' expr
 			;
 
-expr : '(' expr ')'
+expr : literal
+	 | id
+	 | '(' expr ')'
 	 |  not expr
 	 |  '-' expr
 	 |  expr bin_op expr
-	 |  literal
-	 |  id
 	 ;
 
 method_name  : id

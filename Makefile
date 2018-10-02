@@ -1,4 +1,4 @@
 parser: parser.y scanner.l
-		bison -d parser.y
+		bison -dv parser.y
 		flex scanner.l
 		gcc -o parser parser.tab.c lex.yy.c -lfl
