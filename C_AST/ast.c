@@ -76,6 +76,26 @@ struct ASTNode *getASTNodeQuaternaryNode(struct ASTNode *first,
 	node->quaternarynodetype.type = type;
 }
 
+struct ASTNode *getASTNodePentnaryNode(struct ASTNode *first,
+									struct ASTNode *second,
+									struct ASTNode *third,
+									struct ASTNode *fourth,
+									struct ASTNode *fifth,
+									PentnaryNodeType type)
+{
+	struct ASTNode *node;
+
+	node = (struct ASTNode *) malloc(sizeof(struct ASTNode));
+
+	node->nodetype = Pentnary;
+	node->pentnarynodetype.first = first;
+	node->pentnarynodetype.second = second;
+	node->pentnarynodetype.third = third;
+	node->pentnarynodetype.fourth = fourth;
+	node->pentnarynodetype.fifth = fifth;
+	node->pentnarynodetype.type = type;
+}
+
 
 struct ASTNode *getASTNodeTernaryOp(struct ASTNode *first, 
 									struct ASTNode *second,
@@ -124,6 +144,7 @@ void printPostFix(struct ASTNode *root)
 {
 	switch (root->nodetype) 
 	{
+		case NONE: break;
 		case BinaryOp:
 						printPostFix(root->binarynode.left);
 						printPostFix(root->binarynode.right);

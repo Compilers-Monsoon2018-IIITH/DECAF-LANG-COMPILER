@@ -1,9 +1,10 @@
-typedef enum  astnodetype {NONE, BinaryOp, TernaryOp, INTLITERAL, Unary, Binary, Ternary, Quaternary} ASTNodeType;
+typedef enum  astnodetype {NONE, BinaryOp, TernaryOp, INTLITERAL, Unary, Binary, Ternary, Quaternary, Pentnary} ASTNodeType;
 typedef enum  binaryoptype {ADD, SUB, MUL, DIV} BinaryOpType; 
-typedef enum  binarynodetype {FIELDS, FIELD_DECLS,FIELD_DECL, METHOD_DECLS, INPUTS} BinaryNodeType;
-typedef enum  ternarynodetype {LIST_ID,VOID_METHOD_DECL} TernaryNodeType;
+typedef enum  binarynodetype {FIELDS, FIELD_DECLS,FIELD_DECL, METHOD_DECLS, INPUTS, INPUT, BLOCK_PARTS, VAR_DECLS, VAR_DECL, STMTS, IDS} BinaryNodeType;
+typedef enum  ternarynodetype {LIST_ID,VOID_METHOD_DECL, STMT, STMT_IF, STMT_IF_ELSE} TernaryNodeType;
 typedef enum  quaternarynodetype {METHOD_DECL} QuaternaryNodeType;
-typedef enum  unarytype {PROG_TYPE, TYPE} UnaryType;
+typedef enum  pentnarynodetype {FOR} PentnaryNodeType;
+typedef enum  unarytype {PROG_TYPE, TYPE, BLOCK, ID, INT_TYPE, BOOL_TYPE} UnaryType;
 
 extern struct ASTNode *getASTNodeNONE();
 
@@ -25,6 +26,14 @@ extern struct ASTNode *getASTNodeQuaternaryNode(struct ASTNode *first,
 									struct ASTNode *third,
 									struct ASTNode *fourth,
 									QuaternaryNodeType type);
+
+extern struct ASTNode *getASTNodePentnaryNode(struct ASTNode *first,
+									struct ASTNode *second,
+									struct ASTNode *third,
+									struct ASTNode *fourth,
+									struct ASTNode *fifth,
+									PentnaryNodeType type);
+
 
 extern struct ASTNode *getASTNodeTernaryOp(struct ASTNode *first, 
 									struct ASTNode *second,
@@ -68,6 +77,15 @@ struct ASTNode {
 			struct ASTNode *third; 
 			struct ASTNode *fourth; 
 		} quaternarynodetype;
+
+		struct ASTPentnaryNode {
+			PentnaryNodeType type;
+			struct ASTNode *first;
+			struct ASTNode *second;
+			struct ASTNode *third; 
+			struct ASTNode *fourth; 
+			struct ASTNode *fifth; 
+		} pentnarynodetype;
 
 		struct ASTExprTernaryOp {
 			struct ASTNode *first;

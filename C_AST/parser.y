@@ -29,8 +29,8 @@
 %left str_lit id true false int_type void_type bool_type if_keyword for_keyword return_keyword break_keyword continue_keyword else_keyword callout_keyword
 
 %%
-program : class_def prog '{' '}' {printPostFix($$);}
-		| class_def prog '{' fields '}' { $$ = getASTUnaryNode($4,PROG_TYPE); printPostFix($$);}
+program : class_def prog '{' '}' {$$ = getASTUnaryNode(getASTNodeNONE(),PROG_TYPE);printPostFix($$);printf("\n");return 0;}
+		| class_def prog '{' fields '}' { $$ = getASTUnaryNode($4,PROG_TYPE); printPostFix($$);printf("\n");return 0;}
 		;
 
 fields  : field_decls
@@ -65,19 +65,19 @@ field_decl : type list_id
 
 list_id   : id
 			{
-			$$=getASTNodeTernaryNode($1,getASTNodeNONE(),getASTNodeNONE(),LIST_ID);
+			$$=getASTNodeTernaryNode(getASTUnaryNode(getASTNodeNONE(),ID),getASTNodeNONE(),getASTNodeNONE(),LIST_ID);
 			}
 		  | id '[' int_literal ']'
 			{
-			$$=getASTNodeTernaryNode($1,$3,getASTNodeNONE(),LIST_ID);
+			$$=getASTNodeTernaryNode(getASTUnaryNode(getASTNodeNONE(),ID),$3,getASTNodeNONE(),LIST_ID);
 			}
 		  | list_id ',' id
 			{
-			$$=getASTNodeTernaryNode($1,$3,getASTNodeNONE(),LIST_ID);
+			$$=getASTNodeTernaryNode($1,getASTUnaryNode(getASTNodeNONE(),ID),getASTNodeNONE(),LIST_ID);
 			}
 		  | list_id ',' id '[' int_literal ']'
 			{
-			$$=getASTNodeTernaryNode($1,$3,$5,LIST_ID);
+			$$=getASTNodeTernaryNode($1,getASTUnaryNode(getASTNodeNONE(),ID),$5,LIST_ID);
 			}
 
 method_decls : method_decls method_decl
@@ -92,19 +92,19 @@ method_decls : method_decls method_decl
 
 method_decl  : type id '(' ')' block
 			  {
-			  $$=getASTNodeQuaternaryNode($1,$2,$5,getASTNodeNONE(),METHOD_DECL);
+			  $$=getASTNodeQuaternaryNode($1,getASTUnaryNode(getASTNodeNONE(),ID),$5,getASTNodeNONE(),METHOD_DECL);
 			  }
 			 | type id '(' inputs ')' block
 			  {
-			  $$=getASTNodeQuaternaryNode($1,$2,$4,$6,METHOD_DECL);
+			  $$=getASTNodeQuaternaryNode($1,getASTUnaryNode(getASTNodeNONE(),ID),$4,$6,METHOD_DECL);
 			  }
 			 | void_type id '(' ')' block
 			  {
-			  $$=getASTNodeTernaryNode($2,$5,getASTNodeNONE(),VOID_METHOD_DECL);
+			  $$=getASTNodeTernaryNode(getASTUnaryNode(getASTNodeNONE(),ID),$5,getASTNodeNONE(),VOID_METHOD_DECL);
 			  }
 			 | void_type id '(' inputs ')' block
 			  {
-			  $$=getASTNodeTernaryNode($2,$4,$6,VOID_METHOD_DECL);
+			  $$=getASTNodeTernaryNode(getASTUnaryNode(getASTNodeNONE(),ID),$4,$6,VOID_METHOD_DECL);
 			  }
 			 ;
 
@@ -119,41 +119,101 @@ inputs	: input
 		;
 
 input 	: type id
+		{
+		$$=getASTNodeBinaryNode($1,getASTUnaryNode(getASTNodeNONE(),ID),INPUT);
+		}
 		; 
 
 block	: '{' block_parts '}'
+		{
+		$$=getASTUnaryNode($2,BLOCK);
+		}
 		| '{' '}'
+		{
+		$$=getASTUnaryNode(getASTNodeNONE(),BLOCK);
+		}
 		;
 
 block_parts : var_declarations statements
+			{
+			$$=getASTNodeBinaryNode($1,$2,BLOCK_PARTS);
+			}
 			| statements
+			{
+			$$=getASTNodeBinaryNode($1,getASTNodeNONE(),BLOCK_PARTS);
+			}
 			| var_declarations
+			{
+			$$=getASTNodeBinaryNode(getASTNodeNONE(),$1,BLOCK_PARTS);
+			}
 			;
 
 var_declarations : var_declaration ';'
+					{
+						$$=getASTNodeBinaryNode($1,getASTNodeNONE(),VAR_DECLS);
+					}
 				 | var_declarations var_declaration ';'
+				 	{
+				 		$$=getASTNodeBinaryNode($1,$2,VAR_DECLS);
+				 	}
 				 ;
 
 statements	: statement
+			{
+				$$=getASTNodeBinaryNode($1,getASTNodeNONE(),STMTS);
+			}
 			| statements statement
+			{
+				$$=getASTNodeBinaryNode($1,$2,STMTS);
+			}
 			;
 
 var_declaration : type ids
+				{
+					$$=getASTNodeBinaryNode($1,$2,VAR_DECL);
+				}
 				;
 
 ids	: id
+	{
+		$$=getASTUnaryNode(getASTNodeNONE(),ID);
+	}
 	| ids ',' id
+	{
+		$$=getASTNodeBinaryNode($1,getASTUnaryNode(getASTNodeNONE(),ID),IDS);
+	}
 	;
 
 type 		: int_type
+			{
+				$$=getASTUnaryNode(getASTNodeNONE(),INT_TYPE);
+			}
 			| bool_type
+			{
+				$$=getASTUnaryNode(getASTNodeNONE(),BOOL_TYPE);
+			}
 			;
 
 statement 	: location assign_op expr ';'
+			{
+				$$=getASTNodeTernaryNode($1,$2,$3,STMT);
+			}
 			| method_call ';'
+			{
+				$$=getASTNodeTernaryNode($1,getASTNodeNONE(),getASTNodeNONE(),STMT);
+			}
 			| if_keyword '(' expr ')' block
+			{
+				$$=getASTNodeTernaryNode($3,$5,getASTNodeNONE(),STMT_IF);
+			}
 			| if_keyword '(' expr ')' block else_keyword block
+			{
+				$$=getASTNodeTernaryNode($3,$5,$7,STMT_IF_ELSE);
+			}
 			| for_keyword id ass expr ',' expr block
+			{
+				
+			}
 			| return_keyword ';'
 			| return_keyword expr ';'
 			| break_keyword ';'
