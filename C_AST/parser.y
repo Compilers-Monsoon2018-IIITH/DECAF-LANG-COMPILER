@@ -1,16 +1,7 @@
 %{
-#include <stdio.h>
-#include "ClassDefs.h"
-#include <bits/stdc++.h>
-
-  extern "C" int yylex();
-  extern "C" int yyparse();
-  extern "C" FILE *yyin;
-  extern "C" int line_num;
-  extern union Node yylval;
-  void yyerror(const char *s);
-  class Prog* start = NULL;
-  int errors=0;
+#include <stdio.h>	
+#include "ast.h"
+#define YYSTYPE struct ASTNode *
 %}
 
 %token id
@@ -38,39 +29,93 @@
 %left str_lit id true false int_type void_type bool_type if_keyword for_keyword return_keyword break_keyword continue_keyword else_keyword callout_keyword
 
 %%
-program : class_def prog '{' '}'
-		| class_def prog '{' fields '}'
+program : class_def prog '{' '}' {printPostFix($$);}
+		| class_def prog '{' fields '}' { $$ = getASTUnaryNode($4,PROG_TYPE); printPostFix($$);}
 		;
 
-fields  : field_decls 
+fields  : field_decls
+		{
+		$$=getASTNodeBinaryNode($1,getASTNodeNONE(),FIELDS);
+		}
 		| method_decls
+		{
+		$$=getASTNodeBinaryNode(getASTNodeNONE(),$1,FIELDS);
+		}
 		| field_decls method_decls
+		{
+		$$=getASTNodeBinaryNode($1,$2,FIELDS);
+		}
 		;
 
 field_decls : field_decls field_decl ';'
+			{
+			$$=getASTNodeBinaryNode($1,$2,FIELD_DECLS);
+			}
 			| field_decl ';'
+			{
+			$$=getASTNodeBinaryNode($1,getASTNodeNONE(),FIELD_DECLS);
+			}
 			;
 
 field_decl : type list_id
+			{
+			$$=getASTNodeBinaryNode($1,$2,FIELD_DECL);
+			}
 		   ;
 
 list_id   : id
+			{
+			$$=getASTNodeTernaryNode($1,getASTNodeNONE(),getASTNodeNONE(),LIST_ID);
+			}
 		  | id '[' int_literal ']'
+			{
+			$$=getASTNodeTernaryNode($1,$3,getASTNodeNONE(),LIST_ID);
+			}
 		  | list_id ',' id
+			{
+			$$=getASTNodeTernaryNode($1,$3,getASTNodeNONE(),LIST_ID);
+			}
 		  | list_id ',' id '[' int_literal ']'
+			{
+			$$=getASTNodeTernaryNode($1,$3,$5,LIST_ID);
+			}
 
 method_decls : method_decls method_decl
+			   {
+		    	$$=getASTNodeBinaryNode($1,$2,METHOD_DECLS);
+			   }
 			 | method_decl
+				{
+				$$=getASTNodeBinaryNode($1,getASTNodeNONE(),METHOD_DECLS);
+				}
 			 ;
 
 method_decl  : type id '(' ')' block
+			  {
+			  $$=getASTNodeQuaternaryNode($1,$2,$5,getASTNodeNONE(),METHOD_DECL);
+			  }
 			 | type id '(' inputs ')' block
+			  {
+			  $$=getASTNodeQuaternaryNode($1,$2,$4,$6,METHOD_DECL);
+			  }
 			 | void_type id '(' ')' block
+			  {
+			  $$=getASTNodeTernaryNode($2,$5,getASTNodeNONE(),VOID_METHOD_DECL);
+			  }
 			 | void_type id '(' inputs ')' block
+			  {
+			  $$=getASTNodeTernaryNode($2,$4,$6,VOID_METHOD_DECL);
+			  }
 			 ;
 
 inputs	: input
+		{
+		$$=getASTNodeBinaryNode($1,getASTNodeNONE(),INPUTS);
+		}
 		| inputs ',' input
+		{
+		$$=getASTNodeBinaryNode($1,$2,INPUTS);
+		}
 		;
 
 input 	: type id
