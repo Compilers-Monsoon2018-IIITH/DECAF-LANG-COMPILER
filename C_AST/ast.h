@@ -1,10 +1,10 @@
 typedef enum  astnodetype {NONE, BinaryOp, TernaryOp, INTLITERAL, Unary, Binary, Ternary, Quaternary, Pentnary} ASTNodeType;
-typedef enum  binaryoptype {ADD, SUB, MUL, DIV} BinaryOpType; 
-typedef enum  binarynodetype {FIELDS, FIELD_DECLS,FIELD_DECL, METHOD_DECLS, INPUTS, INPUT, BLOCK_PARTS, VAR_DECLS, VAR_DECL, STMTS, IDS} BinaryNodeType;
-typedef enum  ternarynodetype {LIST_ID,VOID_METHOD_DECL, STMT, STMT_IF, STMT_IF_ELSE} TernaryNodeType;
+typedef enum  binaryoptype { NO_USE } BinaryOpType;
+typedef enum  binarynodetype {FIELDS, FIELD_DECLS,FIELD_DECL, METHOD_DECLS, INPUTS, INPUT, BLOCK_PARTS, VAR_DECLS, VAR_DECL, STMTS, IDS, RETURN, METHOD_CALL, CALLOUT_ARGS, LOCATION, EXPRS} BinaryNodeType;
+typedef enum  ternarynodetype {LIST_ID,VOID_METHOD_DECL, STMT, STMT_IF, STMT_IF_ELSE, EXPR} TernaryNodeType;
 typedef enum  quaternarynodetype {METHOD_DECL} QuaternaryNodeType;
 typedef enum  pentnarynodetype {FOR} PentnaryNodeType;
-typedef enum  unarytype {PROG_TYPE, TYPE, BLOCK, ID, INT_TYPE, BOOL_TYPE} UnaryType;
+typedef enum  unarytype {PROG_TYPE, TYPE, BLOCK, ID, INT_TYPE, BOOL_TYPE, RET, BREAK, CONT, ASS, PLUS_EQ, MINUS_EQ, METHOD_NAME, CALLOUT, STR_LIT, NOT, CALLOUT_ARG, BIN_OP, ADD, SUB, MUL, DIV, MOD, GT, LT, GE, LE, EQ, NEQ, AND, OR, INT_LIT, BOOL_LIT,CHAR_LIT, DEC, HEX, T, F} UnaryType;
 
 extern struct ASTNode *getASTNodeNONE();
 

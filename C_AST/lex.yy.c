@@ -896,12 +896,12 @@ YY_RULE_SETUP
 case 16:
 YY_RULE_SETUP
 #line 22 "scanner.l"
-{/*printf("dec ");*/ return dec;}
+{/*printf("dec ");*/yylval=atoi(yytext); return dec;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
 #line 23 "scanner.l"
-{/*printf("hex ");*/ return hex;}
+{/*printf("hex ");*/yylval=atoi(yytext); return hex;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP

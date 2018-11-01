@@ -145,37 +145,126 @@ void printPostFix(struct ASTNode *root)
 	switch (root->nodetype) 
 	{
 		case NONE: break;
-		case BinaryOp:
-						printPostFix(root->binarynode.left);
-						printPostFix(root->binarynode.right);
-						switch (root->binarynode.operator) 
-						{
-							case ADD: printf("+ ");
-									break; 
-							case SUB: printf("- ");
-									break;
-							case MUL: printf("* ");
-									break;
-							case DIV: printf("/ ");
-									break;
-						}
-						break;
-		case Binary:	printPostFix(root->binarynode.left);
-						printPostFix(root->binarynode.right);
-						break;
-		case TernaryOp: printPostFix(root->ternarynode.first);
-						printPostFix(root->ternarynode.second);
-						printPostFix(root->ternarynode.third);
-						printf("? ");
-						break;
-		case INTLITERAL: printf("%d ", root->litval);
-						break;
-		case Unary: 	switch (root->unarynode.type)
+		case Unary:		switch (root->unarynode.type)
 						{
 							case PROG_TYPE: printf("Class Program ");
 											break;
+							case ID:	printf("id ");
+										break;
+							case INT_TYPE: printf("int ");
+										break;
+							case BOOL_TYPE: printf("bool ");
+										break;
+							case BLOCK: printf("block ");
+										break;
+							case RET: printf("return ");
+										break;
+							case BREAK: printf("break ");
+										break;
+							case CONT: printf("continue ");
+										break;
+							case ASS: printf("= ");
+										break;
+							case PLUS_EQ: printf("+= ");
+										break;
+							case MINUS_EQ: printf("-= ");
+										break;
+							case METHOD_NAME: printf("method_name ");
+										break;
+							case CALLOUT: printf("callout ");
+										break;
+							case STR_LIT: printf("string_literal ");
+										break;
+							case NOT: printf("! ");
+										break;
+							case CALLOUT_ARG: printf("callout_arg");
+										break;
+							case BIN_OP: printf("binary_operation");
+										break;
+							case ADD: printf("+ ");
+										break;
+							case SUB: printf("- ");
+										break;
+							case MUL: printf("* ");
+										break;
+							case DIV: printf("/ ");
+										break;
+							case MOD: printf("%% ");
+										break;
+							case GT: printf("> ");
+										break;
+							case LT: printf("< ");
+										break;
+							case GE: printf(">= ");
+										break;
+							case LE: printf("<= ");
+										break;
+							case EQ: printf("== ");
+										break;
+							case NEQ: printf("!= ");
+										break;
+							case AND: printf("&& ");
+										break;
+							case OR: printf("|| ");
+										break;
+							case INT_LIT: printf("int_literal ");
+										break;
+							case BOOL_LIT: printf("bool_literal ");
+										break;
+							case DEC: printf("decimal ");
+										break;
+							case HEX: printf("hexadecimal ");
+										break;
+							case T:	printf("true ");
+										break;
+							case F: printf("false ");
+										break;
 						}
 						printPostFix(root->unarynode.child);
+						break;
+		case Binary:	switch (root->binarynodetype.type)
+						{
+							case RETURN: printf("return ");
+							break;
+						}
+						printPostFix(root->binarynodetype.left);
+						printPostFix(root->binarynodetype.right);
+						break;
+		case Ternary:	switch (root->ternarynodetype.type)
+						{
+							case VOID_METHOD_DECL: printf("void ");
+												break;
+							case STMT_IF: printf("if ");
+											break;
+							case STMT_IF_ELSE: printf("if ");
+											break;
+						}
+						printPostFix(root->ternarynodetype.first);
+						printPostFix(root->ternarynodetype.second);
+						switch (root->ternarynodetype.type)
+						{
+						case STMT_IF_ELSE: printf("else ");
+											break;	
+						}
+						printPostFix(root->ternarynodetype.third);
+						break;
+		case Quaternary:printPostFix(root->quaternarynodetype.first);
+						printPostFix(root->quaternarynodetype.second);
+						printPostFix(root->quaternarynodetype.third);
+						printPostFix(root->quaternarynodetype.fourth);
+						break;
+		case Pentnary:switch (root->pentnarynodetype.type)
+						{
+							case FOR: printf("for ");
+									break;
+						}
+						printPostFix(root->pentnarynodetype.first);
+						printPostFix(root->pentnarynodetype.second);
+						printPostFix(root->pentnarynodetype.third);
+						printPostFix(root->pentnarynodetype.fourth);
+						printPostFix(root->pentnarynodetype.fifth);
+						break;
+		case INTLITERAL: printf("%d ", root->litval);
 						break;
 	}
 };

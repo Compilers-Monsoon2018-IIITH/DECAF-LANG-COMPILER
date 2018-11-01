@@ -19,8 +19,8 @@ int lineno = 0;
 [t][r][u][e]			{/*printf("true ");*/ return true;}
 [f][a][l][s][e]			{/*printf("false ");*/ return false;}
 [a-zA-Z][a-zA-Z0-9]*	{/*printf("id ");*/ return id;}
-[0-9][0-9]*				{/*printf("dec ");*/ return dec;}
-[0x][a-fA-F0-9]+		{/*printf("hex ");*/ return hex;}
+[0-9]+					{/*printf("dec ");*/yylval=atoi(yytext); return dec;}
+[0x][a-fA-F0-9]+		{/*printf("hex ");*/yylval=atoi(yytext); return hex;}
 ["'"][a-zA-z]["'"]		{/*printf("char ");*/ return char_lit;}
 ['"'][a-zA-z]*['"']		{/*printf("str ");*/ return str_lit;}
 "+="					{/*printf("plus_eq ");*/ return pe;}

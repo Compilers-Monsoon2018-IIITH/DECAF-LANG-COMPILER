@@ -457,12 +457,12 @@ static const yytype_uint16 yyrline[] =
       66,    70,    74,    78,    83,    87,    93,    97,   101,   105,
      111,   115,   121,   127,   131,   137,   141,   145,   151,   155,
      161,   165,   171,   177,   181,   187,   191,   197,   201,   205,
-     209,   213,   217,   218,   219,   220,   221,   224,   225,   226,
-     229,   230,   231,   232,   235,   236,   239,   240,   242,   243,
-     246,   247,   248,   249,   250,   251,   254,   257,   258,   262,
-     263,   264,   265,   268,   269,   270,   271,   272,   275,   276,
-     277,   278,   281,   282,   285,   286,   289,   290,   291,   294,
-     295,   298,   299
+     209,   213,   217,   221,   225,   229,   233,   239,   243,   247,
+     253,   257,   261,   265,   271,   275,   281,   285,   290,   294,
+     300,   304,   308,   312,   316,   320,   326,   332,   336,   343,
+     347,   351,   355,   361,   365,   369,   373,   377,   383,   387,
+     391,   395,   401,   405,   411,   415,   421,   425,   429,   435,
+     439,   445,   449
 };
 #endif
 
@@ -1699,13 +1699,421 @@ yyreduce:
   case 41:
 #line 214 "parser.y" /* yacc.c:1646  */
     {
-				
+				(yyval)=getASTNodePentnaryNode(getASTUnaryNode(getASTNodeNONE(),ID),(yyvsp[-4]),(yyvsp[-3]),(yyvsp[-1]),(yyvsp[0]),FOR);
 			}
 #line 1705 "parser.tab.c" /* yacc.c:1646  */
     break;
 
+  case 42:
+#line 218 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTNodeBinaryNode(getASTUnaryNode(getASTNodeNONE(),RET),getASTNodeNONE(),RETURN);
+			}
+#line 1713 "parser.tab.c" /* yacc.c:1646  */
+    break;
 
-#line 1709 "parser.tab.c" /* yacc.c:1646  */
+  case 43:
+#line 222 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTNodeBinaryNode(getASTUnaryNode(getASTNodeNONE(),RET),(yyvsp[-1]),RETURN);
+			}
+#line 1721 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 44:
+#line 226 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTUnaryNode(getASTNodeNONE(),BREAK);
+			}
+#line 1729 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 45:
+#line 230 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTUnaryNode(getASTNodeNONE(),CONT);
+			}
+#line 1737 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 46:
+#line 234 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTUnaryNode(getASTNodeNONE(),BLOCK);
+			}
+#line 1745 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 47:
+#line 240 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTUnaryNode(getASTNodeNONE(),ASS);
+			}
+#line 1753 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 48:
+#line 244 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTUnaryNode(getASTNodeNONE(),PLUS_EQ);
+			}
+#line 1761 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 49:
+#line 248 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTUnaryNode(getASTNodeNONE(),MINUS_EQ);
+			}
+#line 1769 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 50:
+#line 254 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTNodeBinaryNode((yyvsp[-2]),getASTNodeNONE(),METHOD_CALL);
+			}
+#line 1777 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 51:
+#line 258 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTNodeBinaryNode((yyvsp[-3]),(yyvsp[-1]),METHOD_CALL);
+			}
+#line 1785 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 52:
+#line 262 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTNodeTernaryNode(getASTUnaryNode(getASTNodeNONE(),CALLOUT),getASTUnaryNode(getASTNodeNONE(),STR_LIT),getASTNodeNONE(),METHOD_CALL);
+			}
+#line 1793 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 53:
+#line 266 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTNodeTernaryNode(getASTUnaryNode(getASTNodeNONE(),CALLOUT),getASTUnaryNode(getASTNodeNONE(),STR_LIT),(yyvsp[-1]),METHOD_CALL);
+			}
+#line 1801 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 54:
+#line 272 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTNodeBinaryNode((yyvsp[-2]),(yyvsp[0]),CALLOUT_ARGS);
+			}
+#line 1809 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 55:
+#line 276 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTNodeBinaryNode((yyvsp[0]),getASTNodeNONE(),CALLOUT_ARGS);
+			}
+#line 1817 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 56:
+#line 282 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTNodeBinaryNode(getASTUnaryNode(getASTNodeNONE(),ID),getASTNodeNONE(),LOCATION);
+			}
+#line 1825 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 57:
+#line 286 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTNodeBinaryNode(getASTUnaryNode(getASTNodeNONE(),ID),(yyvsp[-1]),LOCATION);
+			}
+#line 1833 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 58:
+#line 291 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTNodeBinaryNode((yyvsp[0]),getASTNodeNONE(),EXPRS);
+			}
+#line 1841 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 59:
+#line 295 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTNodeBinaryNode((yyvsp[-2]),(yyvsp[0]),EXPRS);
+			}
+#line 1849 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 60:
+#line 301 "parser.y" /* yacc.c:1646  */
+    {
+		 (yyval)=getASTNodeTernaryNode((yyvsp[0]),getASTNodeNONE(),getASTNodeNONE(),EXPR);
+	 }
+#line 1857 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 61:
+#line 305 "parser.y" /* yacc.c:1646  */
+    {
+   	 	 (yyval)=getASTNodeTernaryNode(getASTUnaryNode(getASTNodeNONE(),ID),getASTNodeNONE(),getASTNodeNONE(),EXPR);
+ 	 }
+#line 1865 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 62:
+#line 309 "parser.y" /* yacc.c:1646  */
+    {
+	 	(yyval)=(yyvsp[-1]);
+	 }
+#line 1873 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 63:
+#line 313 "parser.y" /* yacc.c:1646  */
+    {
+	 	(yyval)=getASTNodeTernaryNode(getASTUnaryNode(getASTNodeNONE(),NOT),(yyvsp[0]),getASTNodeNONE(),EXPR);
+	 }
+#line 1881 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 64:
+#line 317 "parser.y" /* yacc.c:1646  */
+    {
+	 	(yyval)=getASTNodeTernaryNode(getASTUnaryNode(getASTNodeNONE(),SUB),(yyvsp[0]),getASTNodeNONE(),EXPR);
+	 }
+#line 1889 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 65:
+#line 321 "parser.y" /* yacc.c:1646  */
+    {
+	 	(yyval)=getASTNodeTernaryNode((yyvsp[-2]),(yyvsp[-1]),(yyvsp[0]),EXPR);
+	 }
+#line 1897 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 66:
+#line 327 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTUnaryNode(getASTNodeNONE(),ID);
+			}
+#line 1905 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 67:
+#line 333 "parser.y" /* yacc.c:1646  */
+    {
+				(yyval)=getASTUnaryNode((yyvsp[0]),CALLOUT_ARG);
+			}
+#line 1913 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 68:
+#line 337 "parser.y" /* yacc.c:1646  */
+    {
+             	(yyval)=getASTUnaryNode(getASTUnaryNode(getASTNodeNONE(),STR_LIT),CALLOUT_ARG);
+             }
+#line 1921 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 69:
+#line 344 "parser.y" /* yacc.c:1646  */
+    {
+			(yyval)=getASTUnaryNode((yyvsp[0]),BIN_OP);
+		}
+#line 1929 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 70:
+#line 348 "parser.y" /* yacc.c:1646  */
+    {
+			(yyval)=getASTUnaryNode((yyvsp[0]),BIN_OP);
+		}
+#line 1937 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 71:
+#line 352 "parser.y" /* yacc.c:1646  */
+    {
+			(yyval)=getASTUnaryNode((yyvsp[0]),BIN_OP);
+		}
+#line 1945 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 72:
+#line 356 "parser.y" /* yacc.c:1646  */
+    {
+			(yyval)=getASTUnaryNode((yyvsp[0]),BIN_OP);
+		}
+#line 1953 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 73:
+#line 362 "parser.y" /* yacc.c:1646  */
+    {
+			(yyval)=getASTUnaryNode(getASTNodeNONE(),ADD);
+		}
+#line 1961 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 74:
+#line 366 "parser.y" /* yacc.c:1646  */
+    {
+			(yyval)=getASTUnaryNode(getASTNodeNONE(),SUB);
+		}
+#line 1969 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 75:
+#line 370 "parser.y" /* yacc.c:1646  */
+    {
+			(yyval)=getASTUnaryNode(getASTNodeNONE(),MUL);
+		}
+#line 1977 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 76:
+#line 374 "parser.y" /* yacc.c:1646  */
+    {
+			(yyval)=getASTUnaryNode(getASTNodeNONE(),DIV);
+		}
+#line 1985 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 77:
+#line 378 "parser.y" /* yacc.c:1646  */
+    {
+			(yyval)=getASTUnaryNode(getASTNodeNONE(),MOD);
+		}
+#line 1993 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 78:
+#line 384 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTUnaryNode(getASTNodeNONE(),GT);
+	}
+#line 2001 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 79:
+#line 388 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTUnaryNode(getASTNodeNONE(),LT);
+	}
+#line 2009 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 80:
+#line 392 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTUnaryNode(getASTNodeNONE(),GE);
+	}
+#line 2017 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 81:
+#line 396 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTUnaryNode(getASTNodeNONE(),LE);
+	}
+#line 2025 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 82:
+#line 402 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTUnaryNode(getASTNodeNONE(),EQ);
+	}
+#line 2033 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 83:
+#line 406 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTUnaryNode(getASTNodeNONE(),NEQ);
+	}
+#line 2041 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 84:
+#line 412 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTUnaryNode(getASTNodeNONE(),AND);
+	}
+#line 2049 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 85:
+#line 416 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTUnaryNode(getASTNodeNONE(),OR);
+	}
+#line 2057 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 86:
+#line 422 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTUnaryNode(getASTNodeNONE(),INT_LIT);
+	}
+#line 2065 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 87:
+#line 426 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTUnaryNode(getASTNodeNONE(),CHAR_LIT);
+	}
+#line 2073 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 88:
+#line 430 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTUnaryNode(getASTNodeNONE(),BOOL_LIT);
+	}
+#line 2081 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 89:
+#line 436 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTNodeIntLiteral(yylval);
+	}
+#line 2089 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 90:
+#line 440 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTNodeIntLiteral(yylval);
+	}
+#line 2097 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 91:
+#line 446 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTUnaryNode(getASTNodeNONE(),T);
+	}
+#line 2105 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 92:
+#line 450 "parser.y" /* yacc.c:1646  */
+    {
+		(yyval)=getASTUnaryNode(getASTNodeNONE(),F);
+	}
+#line 2113 "parser.tab.c" /* yacc.c:1646  */
+    break;
+
+
+#line 2117 "parser.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1933,7 +2341,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 302 "parser.y" /* yacc.c:1906  */
+#line 455 "parser.y" /* yacc.c:1906  */
 
 
 main(int argc, char **argv)

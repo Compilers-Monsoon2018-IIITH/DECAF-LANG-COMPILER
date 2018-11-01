@@ -212,91 +212,244 @@ statement 	: location assign_op expr ';'
 			}
 			| for_keyword id ass expr ',' expr block
 			{
-				
+				$$=getASTNodePentnaryNode(getASTUnaryNode(getASTNodeNONE(),ID),$3,$4,$6,$7,FOR);
 			}
 			| return_keyword ';'
+			{
+				$$=getASTNodeBinaryNode(getASTUnaryNode(getASTNodeNONE(),RET),getASTNodeNONE(),RETURN);
+			}
 			| return_keyword expr ';'
+			{
+				$$=getASTNodeBinaryNode(getASTUnaryNode(getASTNodeNONE(),RET),$2,RETURN);
+			}
 			| break_keyword ';'
+			{
+				$$=getASTUnaryNode(getASTNodeNONE(),BREAK);
+			}
 			| continue_keyword ';'
+			{
+				$$=getASTUnaryNode(getASTNodeNONE(),CONT);
+			}
 			| block
+			{
+				$$=getASTUnaryNode(getASTNodeNONE(),BLOCK);
+			}
 			;
 
 assign_op 	: ass
+			{
+				$$=getASTUnaryNode(getASTNodeNONE(),ASS);
+			}
 			| pe
+			{
+				$$=getASTUnaryNode(getASTNodeNONE(),PLUS_EQ);
+			}
 			| me
+			{
+				$$=getASTUnaryNode(getASTNodeNONE(),MINUS_EQ);
+			}
 			;
 
 method_call : method_name '(' ')'
+			{
+				$$=getASTNodeBinaryNode($1,getASTNodeNONE(),METHOD_CALL);
+			}
 			| method_name '(' exprs ')'
+			{
+				$$=getASTNodeBinaryNode($1,$3,METHOD_CALL);
+			}
 			| callout_keyword '(' str_lit ')'
+			{
+				$$=getASTNodeTernaryNode(getASTUnaryNode(getASTNodeNONE(),CALLOUT),getASTUnaryNode(getASTNodeNONE(),STR_LIT),getASTNodeNONE(),METHOD_CALL);
+			}
 			| callout_keyword '(' str_lit ',' callout_args ')'
+			{
+				$$=getASTNodeTernaryNode(getASTUnaryNode(getASTNodeNONE(),CALLOUT),getASTUnaryNode(getASTNodeNONE(),STR_LIT),$5,METHOD_CALL);
+			}
 			;
 
 callout_args : callout_arg ',' callout_args
+			{
+				$$=getASTNodeBinaryNode($1,$3,CALLOUT_ARGS);
+			}
 			| callout_arg
+			{
+				$$=getASTNodeBinaryNode($1,getASTNodeNONE(),CALLOUT_ARGS);
+			}
 			;
 
 location 	: id
+			{
+				$$=getASTNodeBinaryNode(getASTUnaryNode(getASTNodeNONE(),ID),getASTNodeNONE(),LOCATION);
+			}
 			| id '[' expr ']'
+			{
+				$$=getASTNodeBinaryNode(getASTUnaryNode(getASTNodeNONE(),ID),$3,LOCATION);
+			}
 
 exprs		: expr
+			{
+				$$=getASTNodeBinaryNode($1,getASTNodeNONE(),EXPRS);
+			}
 			| exprs ',' expr
+			{
+				$$=getASTNodeBinaryNode($1,$3,EXPRS);
+			}
 			;
 
-expr : literal
+expr : 	literal
+	 {
+		 $$=getASTNodeTernaryNode($1,getASTNodeNONE(),getASTNodeNONE(),EXPR);
+	 }
 	 | id
+  	 {
+   	 	 $$=getASTNodeTernaryNode(getASTUnaryNode(getASTNodeNONE(),ID),getASTNodeNONE(),getASTNodeNONE(),EXPR);
+ 	 }
 	 | '(' expr ')'
+	 {
+	 	$$=$2;
+	 }
 	 |  not expr
+	 {
+	 	$$=getASTNodeTernaryNode(getASTUnaryNode(getASTNodeNONE(),NOT),$2,getASTNodeNONE(),EXPR);
+	 }
 	 |  '-' expr
+	 {
+	 	$$=getASTNodeTernaryNode(getASTUnaryNode(getASTNodeNONE(),SUB),$2,getASTNodeNONE(),EXPR);
+	 }
 	 |  expr bin_op expr
+	 {
+	 	$$=getASTNodeTernaryNode($1,$2,$3,EXPR);
+	 }
 	 ;
 
 method_name  : id
+			{
+				$$=getASTUnaryNode(getASTNodeNONE(),ID);
+			}
 			 ;
 
 callout_arg  : expr
+			{
+				$$=getASTUnaryNode($1,CALLOUT_ARG);
+			}
              | str_lit
+             {
+             	$$=getASTUnaryNode(getASTUnaryNode(getASTNodeNONE(),STR_LIT),CALLOUT_ARG);
+             }
              ;
 
 
 bin_op : arith_op
+		{
+			$$=getASTUnaryNode($1,BIN_OP);
+		}
 	 |  rel_op
+		{
+			$$=getASTUnaryNode($1,BIN_OP);
+		}
 	 |  eq_op
+		{
+			$$=getASTUnaryNode($1,BIN_OP);
+		}
 	 |  cond_op
+		{
+			$$=getASTUnaryNode($1,BIN_OP);
+		}
 	 ;
 
 arith_op : '+'
+		{
+			$$=getASTUnaryNode(getASTNodeNONE(),ADD);
+		}
 	 |  '-'
+		{
+			$$=getASTUnaryNode(getASTNodeNONE(),SUB);
+		}
 	 |  '*'
+		{
+			$$=getASTUnaryNode(getASTNodeNONE(),MUL);
+		}
 	 |  '/'
+		{
+			$$=getASTUnaryNode(getASTNodeNONE(),DIV);
+		}
 	 |  '%'
+		{
+			$$=getASTUnaryNode(getASTNodeNONE(),MOD);
+		}
 	 ;
 
 rel_op : gt
+	{
+		$$=getASTUnaryNode(getASTNodeNONE(),GT);
+	}
 	 |  lt
+	{
+		$$=getASTUnaryNode(getASTNodeNONE(),LT);
+	}
 	 |  ge
+	{
+		$$=getASTUnaryNode(getASTNodeNONE(),GE);
+	}
 	 |  le
+	{
+		$$=getASTUnaryNode(getASTNodeNONE(),LE);
+	}
 	 ;
 
 eq_op : eq
+	{
+		$$=getASTUnaryNode(getASTNodeNONE(),EQ);
+	}
 	 |  neq
+	{
+		$$=getASTUnaryNode(getASTNodeNONE(),NEQ);
+	}
 	 ;
 
 cond_op : and
+	{
+		$$=getASTUnaryNode(getASTNodeNONE(),AND);
+	}
 	 |  or
+	{
+		$$=getASTUnaryNode(getASTNodeNONE(),OR);
+	}
 	 ;
 
 literal : int_literal
+	{
+		$$=getASTUnaryNode(getASTNodeNONE(),INT_LIT);
+	}
 	 |  char_lit
+	{
+		$$=getASTUnaryNode(getASTNodeNONE(),CHAR_LIT);
+	}
 	 |  bool_literal
+	{
+		$$=getASTUnaryNode(getASTNodeNONE(),BOOL_LIT);
+	}
 	 ;
 
 int_literal : dec
+	{
+		$$=getASTNodeIntLiteral(yylval);
+	}
 	 |  hex
+	{
+		$$=getASTNodeIntLiteral(yylval);
+	}
 	 ;
 
 bool_literal : true
+	{
+		$$=getASTUnaryNode(getASTNodeNONE(),T);
+	}
 	 |  false
+	{
+		$$=getASTUnaryNode(getASTNodeNONE(),F);
+	}
 	 ;
 
 %%
