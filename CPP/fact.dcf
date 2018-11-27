@@ -1,0 +1,25 @@
+class Program
+{
+	int factorial(int n)
+	{
+		int ans;
+		int i;
+		ans=1;
+		for i=2,n+1
+		{
+			ans=ans*i;
+			i+=1;
+		}
+		return ans;
+	}
+	int main()
+	{
+		int n;
+		int f;
+		n=5;
+		f=factorial(n);
+		callout("printf","%d\n",n);
+		callout("printf","%d\n",f);
+		return 0;
+	}
+}

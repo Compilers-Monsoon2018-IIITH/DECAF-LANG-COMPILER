@@ -1,0 +1,2478 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 program: class_def prog '{' '}'
+    2        | class_def prog '{' field_decls '}'
+    3        | class_def prog '{' method_decls '}'
+    4        | class_def prog '{' field_decls method_decls '}'
+
+    5 field_decls: field_decl
+    6            | field_decls field_decl
+
+    7 field_decl: type list_id ';'
+
+    8 list_id: ids
+    9        | list_id ',' ids
+
+   10 identifier_list: id
+   11                | identifier_list ',' id
+
+   12 method_decls: method_decl
+   13             | method_decls method_decl
+
+   14 method_decl: type id '(' ')' block
+   15            | type id '(' inputs ')' block
+   16            | void_type id '(' ')' block
+   17            | void_type id '(' inputs ')' block
+
+   18 inputs: input
+   19       | inputs ',' input
+
+   20 input: type id
+
+   21 block: '{' '}'
+   22      | '{' var_declarations '}'
+   23      | '{' statements '}'
+   24      | '{' var_declarations statements '}'
+
+   25 statements: statement
+   26           | statements statement
+
+   27 var_declarations: var_declaration
+   28                 | var_declarations var_declaration
+
+   29 var_declaration: type identifier_list ';'
+
+   30 ids: id
+   31    | id '[' int_val ']'
+
+   32 type: int_type
+   33     | bool_type
+
+   34 statement: ';'
+   35          | location assign_op expr ';'
+   36          | method_call ';'
+   37          | if_keyword '(' expr ')' block
+   38          | if_keyword '(' expr ')' block else_keyword block
+   39          | for_keyword id ass expr ',' expr block
+   40          | return_keyword ';'
+   41          | return_keyword expr ';'
+   42          | break_keyword ';'
+   43          | continue_keyword ';'
+   44          | block
+
+   45 assign_op: ass
+   46          | pe
+   47          | me
+
+   48 method_call: id '(' exprs ')'
+   49            | id '(' ')'
+   50            | callout_keyword '(' str_lit ',' callout_args ')'
+   51            | callout_keyword '(' str_lit ')'
+
+   52 callout_args: callout_arg
+   53             | callout_args ',' callout_arg
+
+   54 location: id
+   55         | id '[' expr ']'
+
+   56 exprs: expr
+   57      | exprs ',' expr
+
+   58 expr: location
+   59     | method_call
+   60     | literal
+   61     | expr or_op expr
+   62     | expr and_op expr
+   63     | expr eq expr
+   64     | expr neq expr
+   65     | expr lt expr
+   66     | expr le expr
+   67     | expr ge expr
+   68     | expr gt expr
+   69     | expr '+' expr
+   70     | expr '-' expr
+   71     | expr '*' expr
+   72     | expr '/' expr
+   73     | expr '%' expr
+   74     | not_op expr
+   75     | '-' expr
+   76     | '(' expr ')'
+
+   77 callout_arg: expr
+   78            | str_lit
+
+   79 literal: int_val
+   80        | char_lit
+   81        | bool_true
+   82        | bool_false
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'%' (37) 73
+'(' (40) 14 15 16 17 37 38 48 49 50 51 76
+')' (41) 14 15 16 17 37 38 48 49 50 51 76
+'*' (42) 71
+'+' (43) 69
+',' (44) 9 11 19 39 50 53 57
+'-' (45) 70 75
+'/' (47) 72
+';' (59) 7 29 34 35 36 40 41 42 43
+'[' (91) 31 55
+']' (93) 31 55
+'{' (123) 1 2 3 4 21 22 23 24
+'}' (125) 1 2 3 4 21 22 23 24
+error (256)
+bool_type (258) 33
+break_keyword (259) 42
+callout_keyword (260) 50 51
+class_def (261) 1 2 3 4
+prog (262) 1 2 3 4
+continue_keyword (263) 43
+else_keyword (264) 38
+bool_false (265) 82
+for_keyword (266) 39
+if_keyword (267) 37 38
+int_type (268) 32
+return_keyword (269) 40 41
+bool_true (270) 81
+void_type (271) 16 17
+or_op (272) 61
+and_op (273) 62
+ass (274) 39 45
+pe (275) 46
+me (276) 47
+eq (277) 63
+neq (278) 64
+le (279) 66
+lt (280) 65
+ge (281) 67
+gt (282) 68
+not_op (283) 74
+UMINUS (284)
+char_lit (285) 80
+int_val (286) 31 79
+id (287) 10 11 14 15 16 17 20 30 31 39 48 49 54 55
+str_lit (288) 50 51 78
+
+
+Nonterminals, with rules where they appear
+
+$accept (47)
+    on left: 0
+program (48)
+    on left: 1 2 3 4, on right: 0
+field_decls (49)
+    on left: 5 6, on right: 2 4 6
+field_decl (50)
+    on left: 7, on right: 5 6
+list_id (51)
+    on left: 8 9, on right: 7 9
+identifier_list (52)
+    on left: 10 11, on right: 11 29
+method_decls (53)
+    on left: 12 13, on right: 3 4 13
+method_decl (54)
+    on left: 14 15 16 17, on right: 12 13
+inputs (55)
+    on left: 18 19, on right: 15 17 19
+input (56)
+    on left: 20, on right: 18 19
+block (57)
+    on left: 21 22 23 24, on right: 14 15 16 17 37 38 39 44
+statements (58)
+    on left: 25 26, on right: 23 24 26
+var_declarations (59)
+    on left: 27 28, on right: 22 24 28
+var_declaration (60)
+    on left: 29, on right: 27 28
+ids (61)
+    on left: 30 31, on right: 8 9
+type (62)
+    on left: 32 33, on right: 7 14 15 20 29
+statement (63)
+    on left: 34 35 36 37 38 39 40 41 42 43 44, on right: 25 26
+assign_op (64)
+    on left: 45 46 47, on right: 35
+method_call (65)
+    on left: 48 49 50 51, on right: 36 59
+callout_args (66)
+    on left: 52 53, on right: 50 53
+location (67)
+    on left: 54 55, on right: 35 58
+exprs (68)
+    on left: 56 57, on right: 48 57
+expr (69)
+    on left: 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75
+    76, on right: 35 37 38 39 41 55 56 57 61 62 63 64 65 66 67 68 69
+    70 71 72 73 74 75 76 77
+callout_arg (70)
+    on left: 77 78, on right: 52 53
+literal (71)
+    on left: 79 80 81 82, on right: 60
+
+
+State 0
+
+    0 $accept: . program $end
+
+    class_def  shift, and go to state 1
+
+    program  go to state 2
+
+
+State 1
+
+    1 program: class_def . prog '{' '}'
+    2        | class_def . prog '{' field_decls '}'
+    3        | class_def . prog '{' method_decls '}'
+    4        | class_def . prog '{' field_decls method_decls '}'
+
+    prog  shift, and go to state 3
+
+
+State 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 4
+
+
+State 3
+
+    1 program: class_def prog . '{' '}'
+    2        | class_def prog . '{' field_decls '}'
+    3        | class_def prog . '{' method_decls '}'
+    4        | class_def prog . '{' field_decls method_decls '}'
+
+    '{'  shift, and go to state 5
+
+
+State 4
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 5
+
+    1 program: class_def prog '{' . '}'
+    2        | class_def prog '{' . field_decls '}'
+    3        | class_def prog '{' . method_decls '}'
+    4        | class_def prog '{' . field_decls method_decls '}'
+
+    bool_type  shift, and go to state 6
+    int_type   shift, and go to state 7
+    void_type  shift, and go to state 8
+    '}'        shift, and go to state 9
+
+    field_decls   go to state 10
+    field_decl    go to state 11
+    method_decls  go to state 12
+    method_decl   go to state 13
+    type          go to state 14
+
+
+State 6
+
+   33 type: bool_type .
+
+    $default  reduce using rule 33 (type)
+
+
+State 7
+
+   32 type: int_type .
+
+    $default  reduce using rule 32 (type)
+
+
+State 8
+
+   16 method_decl: void_type . id '(' ')' block
+   17            | void_type . id '(' inputs ')' block
+
+    id  shift, and go to state 15
+
+
+State 9
+
+    1 program: class_def prog '{' '}' .
+
+    $default  reduce using rule 1 (program)
+
+
+State 10
+
+    2 program: class_def prog '{' field_decls . '}'
+    4        | class_def prog '{' field_decls . method_decls '}'
+    6 field_decls: field_decls . field_decl
+
+    bool_type  shift, and go to state 6
+    int_type   shift, and go to state 7
+    void_type  shift, and go to state 8
+    '}'        shift, and go to state 16
+
+    field_decl    go to state 17
+    method_decls  go to state 18
+    method_decl   go to state 13
+    type          go to state 14
+
+
+State 11
+
+    5 field_decls: field_decl .
+
+    $default  reduce using rule 5 (field_decls)
+
+
+State 12
+
+    3 program: class_def prog '{' method_decls . '}'
+   13 method_decls: method_decls . method_decl
+
+    bool_type  shift, and go to state 6
+    int_type   shift, and go to state 7
+    void_type  shift, and go to state 8
+    '}'        shift, and go to state 19
+
+    method_decl  go to state 20
+    type         go to state 21
+
+
+State 13
+
+   12 method_decls: method_decl .
+
+    $default  reduce using rule 12 (method_decls)
+
+
+State 14
+
+    7 field_decl: type . list_id ';'
+   14 method_decl: type . id '(' ')' block
+   15            | type . id '(' inputs ')' block
+
+    id  shift, and go to state 22
+
+    list_id  go to state 23
+    ids      go to state 24
+
+
+State 15
+
+   16 method_decl: void_type id . '(' ')' block
+   17            | void_type id . '(' inputs ')' block
+
+    '('  shift, and go to state 25
+
+
+State 16
+
+    2 program: class_def prog '{' field_decls '}' .
+
+    $default  reduce using rule 2 (program)
+
+
+State 17
+
+    6 field_decls: field_decls field_decl .
+
+    $default  reduce using rule 6 (field_decls)
+
+
+State 18
+
+    4 program: class_def prog '{' field_decls method_decls . '}'
+   13 method_decls: method_decls . method_decl
+
+    bool_type  shift, and go to state 6
+    int_type   shift, and go to state 7
+    void_type  shift, and go to state 8
+    '}'        shift, and go to state 26
+
+    method_decl  go to state 20
+    type         go to state 21
+
+
+State 19
+
+    3 program: class_def prog '{' method_decls '}' .
+
+    $default  reduce using rule 3 (program)
+
+
+State 20
+
+   13 method_decls: method_decls method_decl .
+
+    $default  reduce using rule 13 (method_decls)
+
+
+State 21
+
+   14 method_decl: type . id '(' ')' block
+   15            | type . id '(' inputs ')' block
+
+    id  shift, and go to state 27
+
+
+State 22
+
+   14 method_decl: type id . '(' ')' block
+   15            | type id . '(' inputs ')' block
+   30 ids: id .
+   31    | id . '[' int_val ']'
+
+    '('  shift, and go to state 28
+    '['  shift, and go to state 29
+
+    $default  reduce using rule 30 (ids)
+
+
+State 23
+
+    7 field_decl: type list_id . ';'
+    9 list_id: list_id . ',' ids
+
+    ';'  shift, and go to state 30
+    ','  shift, and go to state 31
+
+
+State 24
+
+    8 list_id: ids .
+
+    $default  reduce using rule 8 (list_id)
+
+
+State 25
+
+   16 method_decl: void_type id '(' . ')' block
+   17            | void_type id '(' . inputs ')' block
+
+    bool_type  shift, and go to state 6
+    int_type   shift, and go to state 7
+    ')'        shift, and go to state 32
+
+    inputs  go to state 33
+    input   go to state 34
+    type    go to state 35
+
+
+State 26
+
+    4 program: class_def prog '{' field_decls method_decls '}' .
+
+    $default  reduce using rule 4 (program)
+
+
+State 27
+
+   14 method_decl: type id . '(' ')' block
+   15            | type id . '(' inputs ')' block
+
+    '('  shift, and go to state 28
+
+
+State 28
+
+   14 method_decl: type id '(' . ')' block
+   15            | type id '(' . inputs ')' block
+
+    bool_type  shift, and go to state 6
+    int_type   shift, and go to state 7
+    ')'        shift, and go to state 36
+
+    inputs  go to state 37
+    input   go to state 34
+    type    go to state 35
+
+
+State 29
+
+   31 ids: id '[' . int_val ']'
+
+    int_val  shift, and go to state 38
+
+
+State 30
+
+    7 field_decl: type list_id ';' .
+
+    $default  reduce using rule 7 (field_decl)
+
+
+State 31
+
+    9 list_id: list_id ',' . ids
+
+    id  shift, and go to state 39
+
+    ids  go to state 40
+
+
+State 32
+
+   16 method_decl: void_type id '(' ')' . block
+
+    '{'  shift, and go to state 41
+
+    block  go to state 42
+
+
+State 33
+
+   17 method_decl: void_type id '(' inputs . ')' block
+   19 inputs: inputs . ',' input
+
+    ','  shift, and go to state 43
+    ')'  shift, and go to state 44
+
+
+State 34
+
+   18 inputs: input .
+
+    $default  reduce using rule 18 (inputs)
+
+
+State 35
+
+   20 input: type . id
+
+    id  shift, and go to state 45
+
+
+State 36
+
+   14 method_decl: type id '(' ')' . block
+
+    '{'  shift, and go to state 41
+
+    block  go to state 46
+
+
+State 37
+
+   15 method_decl: type id '(' inputs . ')' block
+   19 inputs: inputs . ',' input
+
+    ','  shift, and go to state 43
+    ')'  shift, and go to state 47
+
+
+State 38
+
+   31 ids: id '[' int_val . ']'
+
+    ']'  shift, and go to state 48
+
+
+State 39
+
+   30 ids: id .
+   31    | id . '[' int_val ']'
+
+    '['  shift, and go to state 29
+
+    $default  reduce using rule 30 (ids)
+
+
+State 40
+
+    9 list_id: list_id ',' ids .
+
+    $default  reduce using rule 9 (list_id)
+
+
+State 41
+
+   21 block: '{' . '}'
+   22      | '{' . var_declarations '}'
+   23      | '{' . statements '}'
+   24      | '{' . var_declarations statements '}'
+
+    bool_type         shift, and go to state 6
+    break_keyword     shift, and go to state 49
+    callout_keyword   shift, and go to state 50
+    continue_keyword  shift, and go to state 51
+    for_keyword       shift, and go to state 52
+    if_keyword        shift, and go to state 53
+    int_type          shift, and go to state 7
+    return_keyword    shift, and go to state 54
+    id                shift, and go to state 55
+    '{'               shift, and go to state 41
+    '}'               shift, and go to state 56
+    ';'               shift, and go to state 57
+
+    block             go to state 58
+    statements        go to state 59
+    var_declarations  go to state 60
+    var_declaration   go to state 61
+    type              go to state 62
+    statement         go to state 63
+    method_call       go to state 64
+    location          go to state 65
+
+
+State 42
+
+   16 method_decl: void_type id '(' ')' block .
+
+    $default  reduce using rule 16 (method_decl)
+
+
+State 43
+
+   19 inputs: inputs ',' . input
+
+    bool_type  shift, and go to state 6
+    int_type   shift, and go to state 7
+
+    input  go to state 66
+    type   go to state 35
+
+
+State 44
+
+   17 method_decl: void_type id '(' inputs ')' . block
+
+    '{'  shift, and go to state 41
+
+    block  go to state 67
+
+
+State 45
+
+   20 input: type id .
+
+    $default  reduce using rule 20 (input)
+
+
+State 46
+
+   14 method_decl: type id '(' ')' block .
+
+    $default  reduce using rule 14 (method_decl)
+
+
+State 47
+
+   15 method_decl: type id '(' inputs ')' . block
+
+    '{'  shift, and go to state 41
+
+    block  go to state 68
+
+
+State 48
+
+   31 ids: id '[' int_val ']' .
+
+    $default  reduce using rule 31 (ids)
+
+
+State 49
+
+   42 statement: break_keyword . ';'
+
+    ';'  shift, and go to state 69
+
+
+State 50
+
+   50 method_call: callout_keyword . '(' str_lit ',' callout_args ')'
+   51            | callout_keyword . '(' str_lit ')'
+
+    '('  shift, and go to state 70
+
+
+State 51
+
+   43 statement: continue_keyword . ';'
+
+    ';'  shift, and go to state 71
+
+
+State 52
+
+   39 statement: for_keyword . id ass expr ',' expr block
+
+    id  shift, and go to state 72
+
+
+State 53
+
+   37 statement: if_keyword . '(' expr ')' block
+   38          | if_keyword . '(' expr ')' block else_keyword block
+
+    '('  shift, and go to state 73
+
+
+State 54
+
+   40 statement: return_keyword . ';'
+   41          | return_keyword . expr ';'
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    ';'              shift, and go to state 80
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 84
+    literal      go to state 85
+
+
+State 55
+
+   48 method_call: id . '(' exprs ')'
+   49            | id . '(' ')'
+   54 location: id .
+   55         | id . '[' expr ']'
+
+    '('  shift, and go to state 86
+    '['  shift, and go to state 87
+
+    $default  reduce using rule 54 (location)
+
+
+State 56
+
+   21 block: '{' '}' .
+
+    $default  reduce using rule 21 (block)
+
+
+State 57
+
+   34 statement: ';' .
+
+    $default  reduce using rule 34 (statement)
+
+
+State 58
+
+   44 statement: block .
+
+    $default  reduce using rule 44 (statement)
+
+
+State 59
+
+   23 block: '{' statements . '}'
+   26 statements: statements . statement
+
+    break_keyword     shift, and go to state 49
+    callout_keyword   shift, and go to state 50
+    continue_keyword  shift, and go to state 51
+    for_keyword       shift, and go to state 52
+    if_keyword        shift, and go to state 53
+    return_keyword    shift, and go to state 54
+    id                shift, and go to state 55
+    '{'               shift, and go to state 41
+    '}'               shift, and go to state 88
+    ';'               shift, and go to state 57
+
+    block        go to state 58
+    statement    go to state 89
+    method_call  go to state 64
+    location     go to state 65
+
+
+State 60
+
+   22 block: '{' var_declarations . '}'
+   24      | '{' var_declarations . statements '}'
+   28 var_declarations: var_declarations . var_declaration
+
+    bool_type         shift, and go to state 6
+    break_keyword     shift, and go to state 49
+    callout_keyword   shift, and go to state 50
+    continue_keyword  shift, and go to state 51
+    for_keyword       shift, and go to state 52
+    if_keyword        shift, and go to state 53
+    int_type          shift, and go to state 7
+    return_keyword    shift, and go to state 54
+    id                shift, and go to state 55
+    '{'               shift, and go to state 41
+    '}'               shift, and go to state 90
+    ';'               shift, and go to state 57
+
+    block            go to state 58
+    statements       go to state 91
+    var_declaration  go to state 92
+    type             go to state 62
+    statement        go to state 63
+    method_call      go to state 64
+    location         go to state 65
+
+
+State 61
+
+   27 var_declarations: var_declaration .
+
+    $default  reduce using rule 27 (var_declarations)
+
+
+State 62
+
+   29 var_declaration: type . identifier_list ';'
+
+    id  shift, and go to state 93
+
+    identifier_list  go to state 94
+
+
+State 63
+
+   25 statements: statement .
+
+    $default  reduce using rule 25 (statements)
+
+
+State 64
+
+   36 statement: method_call . ';'
+
+    ';'  shift, and go to state 95
+
+
+State 65
+
+   35 statement: location . assign_op expr ';'
+
+    ass  shift, and go to state 96
+    pe   shift, and go to state 97
+    me   shift, and go to state 98
+
+    assign_op  go to state 99
+
+
+State 66
+
+   19 inputs: inputs ',' input .
+
+    $default  reduce using rule 19 (inputs)
+
+
+State 67
+
+   17 method_decl: void_type id '(' inputs ')' block .
+
+    $default  reduce using rule 17 (method_decl)
+
+
+State 68
+
+   15 method_decl: type id '(' inputs ')' block .
+
+    $default  reduce using rule 15 (method_decl)
+
+
+State 69
+
+   42 statement: break_keyword ';' .
+
+    $default  reduce using rule 42 (statement)
+
+
+State 70
+
+   50 method_call: callout_keyword '(' . str_lit ',' callout_args ')'
+   51            | callout_keyword '(' . str_lit ')'
+
+    str_lit  shift, and go to state 100
+
+
+State 71
+
+   43 statement: continue_keyword ';' .
+
+    $default  reduce using rule 43 (statement)
+
+
+State 72
+
+   39 statement: for_keyword id . ass expr ',' expr block
+
+    ass  shift, and go to state 101
+
+
+State 73
+
+   37 statement: if_keyword '(' . expr ')' block
+   38          | if_keyword '(' . expr ')' block else_keyword block
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 102
+    literal      go to state 85
+
+
+State 74
+
+   82 literal: bool_false .
+
+    $default  reduce using rule 82 (literal)
+
+
+State 75
+
+   81 literal: bool_true .
+
+    $default  reduce using rule 81 (literal)
+
+
+State 76
+
+   75 expr: '-' . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 103
+    literal      go to state 85
+
+
+State 77
+
+   74 expr: not_op . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 104
+    literal      go to state 85
+
+
+State 78
+
+   80 literal: char_lit .
+
+    $default  reduce using rule 80 (literal)
+
+
+State 79
+
+   79 literal: int_val .
+
+    $default  reduce using rule 79 (literal)
+
+
+State 80
+
+   40 statement: return_keyword ';' .
+
+    $default  reduce using rule 40 (statement)
+
+
+State 81
+
+   76 expr: '(' . expr ')'
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 105
+    literal      go to state 85
+
+
+State 82
+
+   59 expr: method_call .
+
+    $default  reduce using rule 59 (expr)
+
+
+State 83
+
+   58 expr: location .
+
+    $default  reduce using rule 58 (expr)
+
+
+State 84
+
+   41 statement: return_keyword expr . ';'
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    or_op   shift, and go to state 106
+    and_op  shift, and go to state 107
+    eq      shift, and go to state 108
+    neq     shift, and go to state 109
+    le      shift, and go to state 110
+    lt      shift, and go to state 111
+    ge      shift, and go to state 112
+    gt      shift, and go to state 113
+    '+'     shift, and go to state 114
+    '-'     shift, and go to state 115
+    '*'     shift, and go to state 116
+    '/'     shift, and go to state 117
+    '%'     shift, and go to state 118
+    ';'     shift, and go to state 119
+
+
+State 85
+
+   60 expr: literal .
+
+    $default  reduce using rule 60 (expr)
+
+
+State 86
+
+   48 method_call: id '(' . exprs ')'
+   49            | id '(' . ')'
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+    ')'              shift, and go to state 120
+
+    method_call  go to state 82
+    location     go to state 83
+    exprs        go to state 121
+    expr         go to state 122
+    literal      go to state 85
+
+
+State 87
+
+   55 location: id '[' . expr ']'
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 123
+    literal      go to state 85
+
+
+State 88
+
+   23 block: '{' statements '}' .
+
+    $default  reduce using rule 23 (block)
+
+
+State 89
+
+   26 statements: statements statement .
+
+    $default  reduce using rule 26 (statements)
+
+
+State 90
+
+   22 block: '{' var_declarations '}' .
+
+    $default  reduce using rule 22 (block)
+
+
+State 91
+
+   24 block: '{' var_declarations statements . '}'
+   26 statements: statements . statement
+
+    break_keyword     shift, and go to state 49
+    callout_keyword   shift, and go to state 50
+    continue_keyword  shift, and go to state 51
+    for_keyword       shift, and go to state 52
+    if_keyword        shift, and go to state 53
+    return_keyword    shift, and go to state 54
+    id                shift, and go to state 55
+    '{'               shift, and go to state 41
+    '}'               shift, and go to state 124
+    ';'               shift, and go to state 57
+
+    block        go to state 58
+    statement    go to state 89
+    method_call  go to state 64
+    location     go to state 65
+
+
+State 92
+
+   28 var_declarations: var_declarations var_declaration .
+
+    $default  reduce using rule 28 (var_declarations)
+
+
+State 93
+
+   10 identifier_list: id .
+
+    $default  reduce using rule 10 (identifier_list)
+
+
+State 94
+
+   11 identifier_list: identifier_list . ',' id
+   29 var_declaration: type identifier_list . ';'
+
+    ';'  shift, and go to state 125
+    ','  shift, and go to state 126
+
+
+State 95
+
+   36 statement: method_call ';' .
+
+    $default  reduce using rule 36 (statement)
+
+
+State 96
+
+   45 assign_op: ass .
+
+    $default  reduce using rule 45 (assign_op)
+
+
+State 97
+
+   46 assign_op: pe .
+
+    $default  reduce using rule 46 (assign_op)
+
+
+State 98
+
+   47 assign_op: me .
+
+    $default  reduce using rule 47 (assign_op)
+
+
+State 99
+
+   35 statement: location assign_op . expr ';'
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 127
+    literal      go to state 85
+
+
+State 100
+
+   50 method_call: callout_keyword '(' str_lit . ',' callout_args ')'
+   51            | callout_keyword '(' str_lit . ')'
+
+    ','  shift, and go to state 128
+    ')'  shift, and go to state 129
+
+
+State 101
+
+   39 statement: for_keyword id ass . expr ',' expr block
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 130
+    literal      go to state 85
+
+
+State 102
+
+   37 statement: if_keyword '(' expr . ')' block
+   38          | if_keyword '(' expr . ')' block else_keyword block
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    or_op   shift, and go to state 106
+    and_op  shift, and go to state 107
+    eq      shift, and go to state 108
+    neq     shift, and go to state 109
+    le      shift, and go to state 110
+    lt      shift, and go to state 111
+    ge      shift, and go to state 112
+    gt      shift, and go to state 113
+    '+'     shift, and go to state 114
+    '-'     shift, and go to state 115
+    '*'     shift, and go to state 116
+    '/'     shift, and go to state 117
+    '%'     shift, and go to state 118
+    ')'     shift, and go to state 131
+
+
+State 103
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+   75     | '-' expr .
+
+    $default  reduce using rule 75 (expr)
+
+
+State 104
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+   74     | not_op expr .
+
+    $default  reduce using rule 74 (expr)
+
+
+State 105
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+   76     | '(' expr . ')'
+
+    or_op   shift, and go to state 106
+    and_op  shift, and go to state 107
+    eq      shift, and go to state 108
+    neq     shift, and go to state 109
+    le      shift, and go to state 110
+    lt      shift, and go to state 111
+    ge      shift, and go to state 112
+    gt      shift, and go to state 113
+    '+'     shift, and go to state 114
+    '-'     shift, and go to state 115
+    '*'     shift, and go to state 116
+    '/'     shift, and go to state 117
+    '%'     shift, and go to state 118
+    ')'     shift, and go to state 132
+
+
+State 106
+
+   61 expr: expr or_op . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 133
+    literal      go to state 85
+
+
+State 107
+
+   62 expr: expr and_op . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 134
+    literal      go to state 85
+
+
+State 108
+
+   63 expr: expr eq . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 135
+    literal      go to state 85
+
+
+State 109
+
+   64 expr: expr neq . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 136
+    literal      go to state 85
+
+
+State 110
+
+   66 expr: expr le . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 137
+    literal      go to state 85
+
+
+State 111
+
+   65 expr: expr lt . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 138
+    literal      go to state 85
+
+
+State 112
+
+   67 expr: expr ge . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 139
+    literal      go to state 85
+
+
+State 113
+
+   68 expr: expr gt . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 140
+    literal      go to state 85
+
+
+State 114
+
+   69 expr: expr '+' . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 141
+    literal      go to state 85
+
+
+State 115
+
+   70 expr: expr '-' . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 142
+    literal      go to state 85
+
+
+State 116
+
+   71 expr: expr '*' . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 143
+    literal      go to state 85
+
+
+State 117
+
+   72 expr: expr '/' . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 144
+    literal      go to state 85
+
+
+State 118
+
+   73 expr: expr '%' . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 145
+    literal      go to state 85
+
+
+State 119
+
+   41 statement: return_keyword expr ';' .
+
+    $default  reduce using rule 41 (statement)
+
+
+State 120
+
+   49 method_call: id '(' ')' .
+
+    $default  reduce using rule 49 (method_call)
+
+
+State 121
+
+   48 method_call: id '(' exprs . ')'
+   57 exprs: exprs . ',' expr
+
+    ','  shift, and go to state 146
+    ')'  shift, and go to state 147
+
+
+State 122
+
+   56 exprs: expr .
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    or_op   shift, and go to state 106
+    and_op  shift, and go to state 107
+    eq      shift, and go to state 108
+    neq     shift, and go to state 109
+    le      shift, and go to state 110
+    lt      shift, and go to state 111
+    ge      shift, and go to state 112
+    gt      shift, and go to state 113
+    '+'     shift, and go to state 114
+    '-'     shift, and go to state 115
+    '*'     shift, and go to state 116
+    '/'     shift, and go to state 117
+    '%'     shift, and go to state 118
+
+    $default  reduce using rule 56 (exprs)
+
+
+State 123
+
+   55 location: id '[' expr . ']'
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    or_op   shift, and go to state 106
+    and_op  shift, and go to state 107
+    eq      shift, and go to state 108
+    neq     shift, and go to state 109
+    le      shift, and go to state 110
+    lt      shift, and go to state 111
+    ge      shift, and go to state 112
+    gt      shift, and go to state 113
+    '+'     shift, and go to state 114
+    '-'     shift, and go to state 115
+    '*'     shift, and go to state 116
+    '/'     shift, and go to state 117
+    '%'     shift, and go to state 118
+    ']'     shift, and go to state 148
+
+
+State 124
+
+   24 block: '{' var_declarations statements '}' .
+
+    $default  reduce using rule 24 (block)
+
+
+State 125
+
+   29 var_declaration: type identifier_list ';' .
+
+    $default  reduce using rule 29 (var_declaration)
+
+
+State 126
+
+   11 identifier_list: identifier_list ',' . id
+
+    id  shift, and go to state 149
+
+
+State 127
+
+   35 statement: location assign_op expr . ';'
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    or_op   shift, and go to state 106
+    and_op  shift, and go to state 107
+    eq      shift, and go to state 108
+    neq     shift, and go to state 109
+    le      shift, and go to state 110
+    lt      shift, and go to state 111
+    ge      shift, and go to state 112
+    gt      shift, and go to state 113
+    '+'     shift, and go to state 114
+    '-'     shift, and go to state 115
+    '*'     shift, and go to state 116
+    '/'     shift, and go to state 117
+    '%'     shift, and go to state 118
+    ';'     shift, and go to state 150
+
+
+State 128
+
+   50 method_call: callout_keyword '(' str_lit ',' . callout_args ')'
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    str_lit          shift, and go to state 151
+    '('              shift, and go to state 81
+
+    method_call   go to state 82
+    callout_args  go to state 152
+    location      go to state 83
+    expr          go to state 153
+    callout_arg   go to state 154
+    literal       go to state 85
+
+
+State 129
+
+   51 method_call: callout_keyword '(' str_lit ')' .
+
+    $default  reduce using rule 51 (method_call)
+
+
+State 130
+
+   39 statement: for_keyword id ass expr . ',' expr block
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    or_op   shift, and go to state 106
+    and_op  shift, and go to state 107
+    eq      shift, and go to state 108
+    neq     shift, and go to state 109
+    le      shift, and go to state 110
+    lt      shift, and go to state 111
+    ge      shift, and go to state 112
+    gt      shift, and go to state 113
+    '+'     shift, and go to state 114
+    '-'     shift, and go to state 115
+    '*'     shift, and go to state 116
+    '/'     shift, and go to state 117
+    '%'     shift, and go to state 118
+    ','     shift, and go to state 155
+
+
+State 131
+
+   37 statement: if_keyword '(' expr ')' . block
+   38          | if_keyword '(' expr ')' . block else_keyword block
+
+    '{'  shift, and go to state 41
+
+    block  go to state 156
+
+
+State 132
+
+   76 expr: '(' expr ')' .
+
+    $default  reduce using rule 76 (expr)
+
+
+State 133
+
+   61 expr: expr . or_op expr
+   61     | expr or_op expr .
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    and_op  shift, and go to state 107
+    eq      shift, and go to state 108
+    neq     shift, and go to state 109
+    le      shift, and go to state 110
+    lt      shift, and go to state 111
+    ge      shift, and go to state 112
+    gt      shift, and go to state 113
+    '+'     shift, and go to state 114
+    '-'     shift, and go to state 115
+    '*'     shift, and go to state 116
+    '/'     shift, and go to state 117
+    '%'     shift, and go to state 118
+
+    $default  reduce using rule 61 (expr)
+
+
+State 134
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   62     | expr and_op expr .
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    eq   shift, and go to state 108
+    neq  shift, and go to state 109
+    le   shift, and go to state 110
+    lt   shift, and go to state 111
+    ge   shift, and go to state 112
+    gt   shift, and go to state 113
+    '+'  shift, and go to state 114
+    '-'  shift, and go to state 115
+    '*'  shift, and go to state 116
+    '/'  shift, and go to state 117
+    '%'  shift, and go to state 118
+
+    $default  reduce using rule 62 (expr)
+
+
+State 135
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   63     | expr eq expr .
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    le   shift, and go to state 110
+    lt   shift, and go to state 111
+    ge   shift, and go to state 112
+    gt   shift, and go to state 113
+    '+'  shift, and go to state 114
+    '-'  shift, and go to state 115
+    '*'  shift, and go to state 116
+    '/'  shift, and go to state 117
+    '%'  shift, and go to state 118
+
+    $default  reduce using rule 63 (expr)
+
+
+State 136
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   64     | expr neq expr .
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    le   shift, and go to state 110
+    lt   shift, and go to state 111
+    ge   shift, and go to state 112
+    gt   shift, and go to state 113
+    '+'  shift, and go to state 114
+    '-'  shift, and go to state 115
+    '*'  shift, and go to state 116
+    '/'  shift, and go to state 117
+    '%'  shift, and go to state 118
+
+    $default  reduce using rule 64 (expr)
+
+
+State 137
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   66     | expr le expr .
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    '+'  shift, and go to state 114
+    '-'  shift, and go to state 115
+    '*'  shift, and go to state 116
+    '/'  shift, and go to state 117
+    '%'  shift, and go to state 118
+
+    le  error (nonassociative)
+    lt  error (nonassociative)
+    ge  error (nonassociative)
+    gt  error (nonassociative)
+
+    $default  reduce using rule 66 (expr)
+
+
+State 138
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   65     | expr lt expr .
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    '+'  shift, and go to state 114
+    '-'  shift, and go to state 115
+    '*'  shift, and go to state 116
+    '/'  shift, and go to state 117
+    '%'  shift, and go to state 118
+
+    le  error (nonassociative)
+    lt  error (nonassociative)
+    ge  error (nonassociative)
+    gt  error (nonassociative)
+
+    $default  reduce using rule 65 (expr)
+
+
+State 139
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   67     | expr ge expr .
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    '+'  shift, and go to state 114
+    '-'  shift, and go to state 115
+    '*'  shift, and go to state 116
+    '/'  shift, and go to state 117
+    '%'  shift, and go to state 118
+
+    le  error (nonassociative)
+    lt  error (nonassociative)
+    ge  error (nonassociative)
+    gt  error (nonassociative)
+
+    $default  reduce using rule 67 (expr)
+
+
+State 140
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   68     | expr gt expr .
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    '+'  shift, and go to state 114
+    '-'  shift, and go to state 115
+    '*'  shift, and go to state 116
+    '/'  shift, and go to state 117
+    '%'  shift, and go to state 118
+
+    le  error (nonassociative)
+    lt  error (nonassociative)
+    ge  error (nonassociative)
+    gt  error (nonassociative)
+
+    $default  reduce using rule 68 (expr)
+
+
+State 141
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   69     | expr '+' expr .
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    '*'  shift, and go to state 116
+    '/'  shift, and go to state 117
+    '%'  shift, and go to state 118
+
+    $default  reduce using rule 69 (expr)
+
+
+State 142
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   70     | expr '-' expr .
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    '*'  shift, and go to state 116
+    '/'  shift, and go to state 117
+    '%'  shift, and go to state 118
+
+    $default  reduce using rule 70 (expr)
+
+
+State 143
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   71     | expr '*' expr .
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    $default  reduce using rule 71 (expr)
+
+
+State 144
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   72     | expr '/' expr .
+   73     | expr . '%' expr
+
+    $default  reduce using rule 72 (expr)
+
+
+State 145
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+   73     | expr '%' expr .
+
+    $default  reduce using rule 73 (expr)
+
+
+State 146
+
+   57 exprs: exprs ',' . expr
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 157
+    literal      go to state 85
+
+
+State 147
+
+   48 method_call: id '(' exprs ')' .
+
+    $default  reduce using rule 48 (method_call)
+
+
+State 148
+
+   55 location: id '[' expr ']' .
+
+    $default  reduce using rule 55 (location)
+
+
+State 149
+
+   11 identifier_list: identifier_list ',' id .
+
+    $default  reduce using rule 11 (identifier_list)
+
+
+State 150
+
+   35 statement: location assign_op expr ';' .
+
+    $default  reduce using rule 35 (statement)
+
+
+State 151
+
+   78 callout_arg: str_lit .
+
+    $default  reduce using rule 78 (callout_arg)
+
+
+State 152
+
+   50 method_call: callout_keyword '(' str_lit ',' callout_args . ')'
+   53 callout_args: callout_args . ',' callout_arg
+
+    ','  shift, and go to state 158
+    ')'  shift, and go to state 159
+
+
+State 153
+
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+   77 callout_arg: expr .
+
+    or_op   shift, and go to state 106
+    and_op  shift, and go to state 107
+    eq      shift, and go to state 108
+    neq     shift, and go to state 109
+    le      shift, and go to state 110
+    lt      shift, and go to state 111
+    ge      shift, and go to state 112
+    gt      shift, and go to state 113
+    '+'     shift, and go to state 114
+    '-'     shift, and go to state 115
+    '*'     shift, and go to state 116
+    '/'     shift, and go to state 117
+    '%'     shift, and go to state 118
+
+    $default  reduce using rule 77 (callout_arg)
+
+
+State 154
+
+   52 callout_args: callout_arg .
+
+    $default  reduce using rule 52 (callout_args)
+
+
+State 155
+
+   39 statement: for_keyword id ass expr ',' . expr block
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 160
+    literal      go to state 85
+
+
+State 156
+
+   37 statement: if_keyword '(' expr ')' block .
+   38          | if_keyword '(' expr ')' block . else_keyword block
+
+    else_keyword  shift, and go to state 161
+
+    $default  reduce using rule 37 (statement)
+
+
+State 157
+
+   57 exprs: exprs ',' expr .
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    or_op   shift, and go to state 106
+    and_op  shift, and go to state 107
+    eq      shift, and go to state 108
+    neq     shift, and go to state 109
+    le      shift, and go to state 110
+    lt      shift, and go to state 111
+    ge      shift, and go to state 112
+    gt      shift, and go to state 113
+    '+'     shift, and go to state 114
+    '-'     shift, and go to state 115
+    '*'     shift, and go to state 116
+    '/'     shift, and go to state 117
+    '%'     shift, and go to state 118
+
+    $default  reduce using rule 57 (exprs)
+
+
+State 158
+
+   53 callout_args: callout_args ',' . callout_arg
+
+    callout_keyword  shift, and go to state 50
+    bool_false       shift, and go to state 74
+    bool_true        shift, and go to state 75
+    '-'              shift, and go to state 76
+    not_op           shift, and go to state 77
+    char_lit         shift, and go to state 78
+    int_val          shift, and go to state 79
+    id               shift, and go to state 55
+    str_lit          shift, and go to state 151
+    '('              shift, and go to state 81
+
+    method_call  go to state 82
+    location     go to state 83
+    expr         go to state 153
+    callout_arg  go to state 162
+    literal      go to state 85
+
+
+State 159
+
+   50 method_call: callout_keyword '(' str_lit ',' callout_args ')' .
+
+    $default  reduce using rule 50 (method_call)
+
+
+State 160
+
+   39 statement: for_keyword id ass expr ',' expr . block
+   61 expr: expr . or_op expr
+   62     | expr . and_op expr
+   63     | expr . eq expr
+   64     | expr . neq expr
+   65     | expr . lt expr
+   66     | expr . le expr
+   67     | expr . ge expr
+   68     | expr . gt expr
+   69     | expr . '+' expr
+   70     | expr . '-' expr
+   71     | expr . '*' expr
+   72     | expr . '/' expr
+   73     | expr . '%' expr
+
+    or_op   shift, and go to state 106
+    and_op  shift, and go to state 107
+    eq      shift, and go to state 108
+    neq     shift, and go to state 109
+    le      shift, and go to state 110
+    lt      shift, and go to state 111
+    ge      shift, and go to state 112
+    gt      shift, and go to state 113
+    '+'     shift, and go to state 114
+    '-'     shift, and go to state 115
+    '*'     shift, and go to state 116
+    '/'     shift, and go to state 117
+    '%'     shift, and go to state 118
+    '{'     shift, and go to state 41
+
+    block  go to state 163
+
+
+State 161
+
+   38 statement: if_keyword '(' expr ')' block else_keyword . block
+
+    '{'  shift, and go to state 41
+
+    block  go to state 164
+
+
+State 162
+
+   53 callout_args: callout_args ',' callout_arg .
+
+    $default  reduce using rule 53 (callout_args)
+
+
+State 163
+
+   39 statement: for_keyword id ass expr ',' expr block .
+
+    $default  reduce using rule 39 (statement)
+
+
+State 164
+
+   38 statement: if_keyword '(' expr ')' block else_keyword block .
+
+    $default  reduce using rule 38 (statement)

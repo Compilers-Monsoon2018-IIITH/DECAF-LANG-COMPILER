@@ -1,399 +1,891 @@
-#include <bits/stdc++.h>
+#ifndef incl_ast
+#define incl_ast
 
-using namespace std;
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <list>
+#include <map>
+#include <stack>
+#include <llvm/IR/BasicBlock.h>
 
-typedef enum  exprType { binary = 1, location = 2, literal = 3, enclExpr = 4 } exprType;
-typedef enum literalType { Int = 1, Bool = 2, Char = 3, String = 4 } literalType;
+class ASTProgram;
+class ASTFieldDecl;
+class ASTVarDecl;
+class ASTId;
+class ASTMethodDecl;
+class ASTInput;
+class ASTStatement;
+class ASTExpression;
+class ASTBlock;
+class ASTAssignmentStatement;
+class ASTMethodCall;
+class ASTMethod;
+class ASTCallout;
+class ASTCalloutArg;
+class ASTStringCalloutArg;
+class ASTExpressionCalloutArg;
+class ASTIfStatement;
+class ASTForStatement;
+class ASTReturnStatement;
+class ASTContinueStatement;
+class ASTBreakStatement;
+class ASTLocation;
+class ASTVarLocation;
+class ASTArrayLocation;
+class ASTLiteralExpression;
+class ASTIntegerLiteralExpression;
+class ASTCharLiteralExpression;
+class ASTTrueLiteralExpression;
+class ASTFalseLiteralExpression;
+class ASTBinaryOpExpr;
+class ASTUnaryOpExpr;
+class SymbolTable;
+class SymbolTableNode;
 
-union Node{
-	int number;
-	char* value;
-	class Prog* prog;
-	class fieldDecls* fields;
-	class fieldDecl* field;
-	class Vars* vars;
-	class Var* var;
-	class methodDecls* methods;
-	class methodDecl* method;
-	class Block* block;
-	class varDecls* var_decls;
-	class varDecl* var_decl;
-	class Stmts* stmts;
-	class Stmt* stmt;
-	class Expr* expr;
-	class calloutArg* callout_arg;
-	class calloutArgs* callout_args;
-	class Params* parameters;
-	class methodArgs* method_args;
-	class methodArg* method_arg;
-	class methodCall* method_call;
-	class Location* location;
-	class Assignment* assignment;
-	class Literal* literal;
-	class stringList* mylist;
-
-	Node(){
-		number = 0;
-		value = NULL;
-		fields = NULL;
-		field = NULL;
-		methods = NULL;
-		method = NULL;
-		var_decls = NULL;
-		stmts = NULL;
-		callout_args = NULL;
-		method_args = NULL;
-	}
-	~Node(){};
+enum class assign_op_type 
+{
+    plus_equal,
+    minus_equal,
+    ass
 };
 
-typedef union Node YYSTYPE;
+enum class binary_op_type 
+{
+    plus_op,
+    minus_op,
+    multiply_op,
+    divide_op,
+    modulo_op,
+    lt_op,
+    gt_op,
+    le_op,
+    ge_op,
+    neq_op,
+    eq_op,
+    and_op,
+    or_op
+};
 
-#define YYSTYPE_IS_DECLARED 1
+enum class Datatype {
+    int_type,
+    void_type,
+    bool_type
+};
 
-class Var{
+enum class UnOp {
+    uminus_op,
+    not_op
+};
+
+class ASTNode {
+public:
+    ASTNode() {
+    }
+    ~ASTNode() {
+    }
+};
+
+class ASTProgram : public ASTNode
+{
+    std::string id="Program";
+    std::vector<ASTFieldDecl *> * fdl;
+    std::vector<ASTMethodDecl *> * mdl;
+public:
+    ASTProgram(std::vector<ASTFieldDecl *> * fdl, std::vector<ASTMethodDecl *> * mdl)
+    {
+        this->mdl = mdl;
+        this->fdl = fdl;
+    }
+    std::string getId()
+    {
+        return this->id;
+    }
+    std::vector<ASTMethodDecl *> * getMdl() 
+    {
+        return this->mdl;
+    }
+    std::vector<ASTFieldDecl *> * getFdl() 
+    {
+        return this->fdl;
+    }
+    ~ASTProgram() 
+    {
+
+    }
+};
+
+class ASTFieldDecl : public ASTNode
+{
+    Datatype type;
+    std::vector<ASTId *> * id_list;
+public:
+    ASTFieldDecl(std::vector<ASTId *> * id_list, Datatype type)
+    {
+        this->type = type;
+        this->id_list = id_list;
+    }
+    std::vector<ASTId *> * getId_list() 
+    {
+        return this->id_list;
+    }
+    Datatype getType() 
+    {
+        return this->type;
+    }
+    ~ASTFieldDecl() {
+
+    }
+};
+
+class ASTVarDecl : public ASTNode
+{
+    Datatype type;
+    std::vector<ASTId *> * id_list;
+public:
+    ASTVarDecl(std::vector<ASTId *> * id_list, Datatype type) 
+    {
+        this->type = type;
+        this->id_list = id_list;
+    }
+    std::vector<ASTId *> * getId_list() 
+    {
+        return this->id_list;
+    }
+    Datatype getType() 
+    {
+        return this->type;
+    }
+    ~ASTVarDecl() 
+    {
+
+    }
+};
+
+class ASTId
+{
+    std::string id;
+    int size;
+public:
+    ASTId(std::string id, int size) 
+    {
+        if (size <= 0) 
+        {
+            std::cerr << "Invalid Size" << std::endl;
+            exit(-1);
+        }
+        this->id = id;
+        this->size = size;
+    }
+    ASTId(std::string id) 
+    {
+        this->id = id;
+        this->size = 0;
+    }
+    std::string getId() 
+    {
+        return this->id;
+    }
+    int getSize() 
+    {
+        return this->size;
+    }
+    ~ASTId() 
+    {
+
+    }
+};
+
+class ASTMethodDecl : public ASTNode
+{
+    std::string id;
+    Datatype returnType;
+    std::vector<ASTInput *> * arguments;
+    ASTBlock * block;
+public:
+    ASTMethodDecl(std::string id, Datatype returnType, std::vector<ASTInput *> * arguments, ASTBlock * block) 
+    {
+        this->id = id;
+        this->returnType = returnType;
+        this->arguments = arguments;
+        this->block = block;
+    }
+    std::string getId() 
+    {
+        return this->id;
+    }
+    Datatype getReturnType() 
+    {
+        return this->returnType;
+    }
+    std::vector<ASTInput *> * getArguments() 
+    {
+        return this->arguments;
+    }
+    ASTBlock * getBlock() 
+    {
+        return this->block;
+    }
+    ~ASTMethodDecl() 
+    {
+
+    }
+};
+
+class ASTInput : public ASTNode
+{
+    std::string id;
+    Datatype type;
+public:
+    ASTInput(std::string id, Datatype type) 
+    {
+        this->id = id;
+        this->type = type;
+    }
+    ~ASTInput() 
+    {
+
+    }
+    std::string getId() 
+    {
+        return this->id;
+    }
+    Datatype getType() 
+    {
+        return this->type;
+    }
+};
+
+class ASTStatement : public ASTNode 
+{
+public:
+    ASTStatement() 
+    {
+
+    }
+    virtual ~ASTStatement() 
+    {
+
+    }
+};
+
+
+class ASTExpression : public ASTNode
+{
+public:
+    ASTExpression() 
+    {
+
+    }
+    virtual ~ASTExpression() 
+    {
+
+    }
+};
+
+class ASTBlock : public ASTStatement
+{
+    std::vector<ASTVarDecl *> * id_list;
+    std::vector<ASTStatement *> * stmtlist;
+public:
+    ASTBlock(std::vector<ASTStatement *> * stmtlist, std::vector<ASTVarDecl *> * id_list) 
+    {
+        this->stmtlist = stmtlist;
+        this->id_list = id_list;
+    }
+    std::vector<ASTVarDecl *> * getId_list() 
+    {
+        return this->id_list;
+    }
+    std::vector<ASTStatement *> * get_statements() 
+    {
+        return this->stmtlist;
+    }
+    ~ASTBlock() 
+    {
+
+    }
+};
+
+class ASTAssignmentStatement : public ASTStatement
+{
+    assign_op_type op;
+    ASTLocation * location;
+    ASTExpression * expr;
+public:
+    ASTAssignmentStatement(assign_op_type op, ASTLocation * location, ASTExpression * expr) 
+    {
+        this->op = op;
+        this->location = location;
+        this->expr = expr;
+    }
+    assign_op_type getOp() 
+    {
+        return this->op;
+    }
+    ASTLocation * getLocation() 
+    {
+        return this->location;
+    }
+    ASTExpression * getExpr() 
+    {
+        return this->expr;
+    }
+    ~ASTAssignmentStatement() 
+    {
+
+    }
+};
+
+class ASTMethodCall : public ASTStatement, public ASTExpression 
+{
+public:
+    ASTMethodCall() 
+    {
+
+    }
+    virtual ~ASTMethodCall() 
+    {
+
+    }
+};
+
+class ASTMethod : public ASTMethodCall 
+{
+    std::string id;
+    std::vector<ASTExpression *> * arguments;
+public:
+    ASTMethod(std::string id, std::vector<ASTExpression *> * arguments) 
+    {
+        this->id = id;
+        this->arguments = arguments;
+    }
+    std::string getId() 
+    {
+        return this->id;
+    }
+    std::vector<ASTExpression *> * getArguments() 
+    {
+        return this->arguments;
+    }
+    ~ASTMethod() 
+    {
+
+    }
+};
+
+class ASTCallout : public ASTMethodCall 
+{
+    std::string method_name;
+    std::vector<ASTCalloutArg *> * arguments;
+public:
+    ASTCallout(std::string method_name, std::vector<ASTCalloutArg *> * arguments) 
+    {
+        this->method_name = method_name;
+        this->arguments = arguments;
+    }
+    std::string getMethod_name() 
+    {
+        return this->method_name;
+    }
+    std::vector<ASTCalloutArg *> * getArguments() 
+    {
+        return this->arguments;
+    }
+    ~ASTCallout() 
+    {
+
+    }
+};
+
+class ASTCalloutArg : public ASTExpression
+{
+public:
+    ASTCalloutArg() 
+    {
+
+    }
+    virtual ~ASTCalloutArg() 
+    {
+
+    }
+};
+
+class ASTStringCalloutArg : public ASTCalloutArg 
+{
+    std::string argument;
+public:
+    ASTStringCalloutArg(std::string argument) 
+    {
+        this->argument = argument;
+    }
+    std::string getArgument() 
+    {
+        return this->argument;
+    }
+    ~ASTStringCalloutArg() 
+    {
+
+    }
+};
+
+class ASTExpressionCalloutArg : public ASTCalloutArg 
+{
+    ASTExpression * argument;
+public:
+    ASTExpressionCalloutArg(ASTExpression * argument) 
+    {
+        this->argument = argument;
+    }
+    ASTExpression * getArgument() 
+    {
+        return this->argument;
+    }
+    ~ASTExpressionCalloutArg() 
+    {
+
+    }
+};
+
+class ASTIfStatement : public ASTStatement 
+{
+    ASTExpression * condition;
+    ASTBlock * if_block;
+    ASTBlock * else_block;
+public:
+    ASTIfStatement(ASTExpression * condition, ASTBlock * if_block, ASTBlock * else_block) 
+    {
+        this->condition = condition;
+        this->if_block = if_block;
+        this->else_block = else_block;
+    }
+    ASTExpression * getCondition() 
+    {
+        return this->condition;
+    }
+    ASTBlock * getIf_block() 
+    {
+        return this->if_block;
+    }
+    ASTBlock * getElse_block() 
+    {
+        return this->else_block;
+    }
+    ~ASTIfStatement() 
+    {
+
+    }
+};
+
+class ASTForStatement : public ASTStatement 
+{
+    std::string id;
+    ASTExpression * init_condition;
+    ASTExpression * end_condition;
+    ASTBlock * block;
+public:
+    ASTForStatement(ASTExpression * init_condition, ASTExpression * end_condition, ASTBlock * block, std::string id) 
+    {
+        this->init_condition = init_condition;
+        this->end_condition = end_condition;
+        this->block = block;
+        this->id = id;
+    }
+    std::string getId() 
+    {
+        return this->id;
+    }
+    ASTExpression * getInit_condition() 
+    {
+        return this->init_condition;
+    }
+    ASTExpression * getEnd_condition() 
+    {
+        return this->end_condition;
+    }
+    ASTBlock * getBlock() 
+    {
+        return this->block;
+    }
+    ~ASTForStatement() 
+    {
+
+    }
+};
+
+class ASTReturnStatement : public ASTStatement
+{
+    ASTExpression * expr;
+public:
+    ASTReturnStatement(ASTExpression * expr) 
+    {
+        this->expr = expr;
+    }
+    ASTExpression * getExpr() 
+    {
+        return this->expr;
+    }
+    ~ASTReturnStatement() 
+    {
+
+    }
+};
+
+class ASTContinueStatement : public ASTStatement
+{
+public:
+    ASTContinueStatement() 
+    {
+
+    }
+    ~ASTContinueStatement() 
+    {
+
+    }
+};
+
+class ASTBreakStatement : public ASTStatement
+{
+public:
+    ASTBreakStatement() 
+    {
+
+    }
+    ~ASTBreakStatement() 
+    {
+
+    }
+};
+
+class ASTLocation : public ASTExpression
+{
+public:
+    ASTLocation() 
+    {
+
+    }
+    virtual ~ASTLocation() 
+    {
+
+    }
+};
+
+class ASTVarLocation : public ASTLocation 
+{
+    std::string id;
+public:
+    ASTVarLocation(std::string id) 
+    {
+        this->id = id;
+    }
+    std::string getId() 
+    {
+        return this->id;
+    }
+    ~ASTVarLocation() 
+    {
+
+    }
+};
+
+class ASTArrayLocation : public ASTLocation
+{
+    std::string id;
+    ASTExpression * index;
+public:
+    ASTArrayLocation(std::string id, ASTExpression * index) 
+    {
+        this->id = id;
+        this->index = index;
+    }
+    std::string getId() 
+    {
+        return this->id;
+    }
+    ASTExpression * getIndex() 
+    {
+        return this->index;
+    }
+    ~ASTArrayLocation() 
+    {
+
+    }
+};
+
+class ASTLiteralExpression : public ASTExpression
+{
+public:
+    ASTLiteralExpression() 
+    {
+
+    }
+    virtual ~ASTLiteralExpression() 
+    {
+
+    }
+};
+
+class ASTIntegerLiteralExpression : public ASTLiteralExpression
+{
+    int value;
+public:
+    ASTIntegerLiteralExpression(int value) 
+    {
+        this->value = value;
+    }
+    int getValue() 
+    {
+        return this->value;
+    }
+    ~ASTIntegerLiteralExpression() 
+    {
+
+    }
+};
+
+class ASTCharLiteralExpression : public ASTLiteralExpression
+{
+    char value;
+public:
+    ASTCharLiteralExpression(char value) 
+    {
+        this->value = value;
+    }
+    char getValue() 
+    {
+        return this->value;
+    }
+    ~ASTCharLiteralExpression() 
+    {
+
+    }
+};
+
+class ASTTrueLiteralExpression : public ASTLiteralExpression
+{
+public:
+    ASTTrueLiteralExpression() 
+    {
+
+    }
+    bool getValue() 
+    {
+        return true;
+    }
+    ~ASTTrueLiteralExpression() 
+    {
+
+    }
+};
+
+class ASTFalseLiteralExpression : public ASTLiteralExpression
+{
+public:
+    ASTFalseLiteralExpression() 
+    {
+
+    }
+    bool getValue() 
+    {
+        return false;
+    }
+    ~ASTFalseLiteralExpression() 
+    {
+
+    }
+};
+
+class ASTBinaryOpExpr : public ASTExpression
+{
+    ASTExpression * left;
+    ASTExpression * right;
+    binary_op_type op;
+public:
+    ASTBinaryOpExpr(ASTExpression * left, ASTExpression * right, binary_op_type op) 
+    {
+        this->left = left;
+        this->right = right;
+        this->op = op;
+    }
+    ASTExpression * getLeft() 
+    {
+        return this->left;
+    }
+    ASTExpression * getRight() 
+    {
+        return this->right;
+    }
+    binary_op_type getOp() 
+    {
+        return this->op;
+    }
+    ~ASTBinaryOpExpr() 
+    {
+
+    }
+};
+
+class ASTUnaryOpExpr : public ASTExpression
+{
+    ASTExpression * expr;
+    UnOp op;
+public:
+    ASTUnaryOpExpr(ASTExpression * expr, UnOp op) 
+    {
+        this->expr = expr;
+        this->op = op;
+    }
+    ASTExpression * getExpr() 
+    {
+        return this->expr;
+    }
+    UnOp getOp () 
+    {
+        return this->op;
+    }
+    ~ASTUnaryOpExpr() 
+    {
+
+    }
+};
+
+class SymbolTableNode
+{
+public:
+    llvm::BasicBlock * block;
+    std::map<std::string, llvm::Value *> locals;
+
+    SymbolTableNode(llvm::BasicBlock * block) 
+    {
+        this->block = block;
+    }
+
+    ~SymbolTableNode() 
+    {
+
+    }
+
+};
+
+class SymbolTable
+{
 private:
-	string declType;
-	string name;
-	string dataType;
-	unsigned int length;
+    std::list<SymbolTableNode> table;
+    std::stack<std::pair<llvm::BasicBlock *, llvm::BasicBlock *>> break_continue_stack;
+
 public:
-	/* Constructors */
-	Var(string,string,unsigned int);
-	Var(string,string);
-	/* Methods */
-	void setDataType(string);
-	void traverse();
+    SymbolTable() 
+    {
+
+    }
+
+    ~SymbolTable() {
+
+    }
+
+    std::map<std::string, llvm::Value *> get_locals()
+    {
+        return this->table.front().locals;
+    }
+
+    void set_locals(std::map<std::string, llvm::Value *> variables)
+    {
+        this->table.front().locals.insert(variables.begin(), variables.end());
+    }
+
+    bool locals_find(std::string name)
+    {
+        auto it = this->get_locals();
+        return it.find(name) != it.end();
+    }
+
+    void locals_decl(std::string name, llvm::Value * value)
+    {
+        if (!this->locals_find(name))
+        {
+            this->table.front().locals.insert(std::pair<std::string, llvm::Value *>(name, value));
+        }
+        else
+        {
+            std::cerr<<"Variable "<<name<<" already declared";
+            exit(0);
+        }
+    }
+
+    bool global_find(std::string name)
+    {
+        return this->get_local_vars(name) != NULL;
+    }
+
+    llvm::Value * get_local_vars(std::string name)
+    {
+        for (auto it = this->table.begin(); it != this->table.end(); it++)
+        {
+            auto found_or_end = it->locals.find(name);
+            if (found_or_end != it->locals.end())
+            {
+                return found_or_end->second;
+            }
+        }
+        return NULL;
+    }
+
+    void pushBlock(llvm::BasicBlock * block)
+    {
+        this->table.push_front(SymbolTableNode(block));
+    }
+
+    void popBlock()
+    {
+        this->table.pop_front();
+    }
+
+    llvm::BasicBlock * topBlock()
+    {
+        for (auto it = this->table.begin(); it != this->table.end(); it++)
+        {
+            if (it->block)
+            {
+                return it->block;
+            }
+        }
+        return this->table.front().block;
+    }
+
+    llvm::BasicBlock * bottomBlock()
+    {
+        return this->table.back().block;
+    }
+
+    void pushBCS(llvm::BasicBlock * breakSt, llvm::BasicBlock * returnSt)
+    {
+        this->break_continue_stack.push(std::make_pair(breakSt, returnSt));
+    }
+
+    void popBCS()
+    {
+        this->break_continue_stack.pop();
+    }
+
+    llvm::BasicBlock * getBS()
+    {
+        if (!this->break_continue_stack.empty())
+        {
+            return this->break_continue_stack.top().first;
+        }
+        return NULL;
+    }
+
+    llvm::BasicBlock * getCS()
+    {
+        if (!this->break_continue_stack.empty())
+        {
+            return this->break_continue_stack.top().second;
+        }
+        return NULL;
+    }
+
 };
 
-class Vars{
-private:
-	vector<class Var*> vars_list;
-	int cnt;
-public:
-	Vars(){}
-	void push_back(class Var*);
-	vector<class Var*> getVarsList();
-	void traverse();
-};
-
-class fieldDecl{
-private:
-	string dataType;
-	vector<class Var*> var_list;
-public:
-	fieldDecl(string,class Vars*);
-	vector<class Var*> getVarsList();
-	void traverse();
-};
-
-class fieldDecls{
-private:
-	vector<class fieldDecl*> decl_list;
-	int cnt;
-public:
-	fieldDecls();
-	void push_back(class fieldDecl*);
-	void traverse();
-};
-
-class Expr{
-protected:
-	exprType etype;
-public:
-	void setEtype(exprType x){etype = x;}
-	exprType getEtype();
-	virtual string toString(){}
-	virtual void traverse(){}
-};
-
-class EnclExpr:public Expr{
-private:
-	class Expr* expr;
-public:
-	EnclExpr(class Expr*);
-	void traverse();
-};
-
-class unExpr:public Expr{
-private:
-	class Expr* body;
-	string opr;
-public:
-	unExpr(string,class Expr*);
-	void traverse();
-};
-
-class binExpr:public Expr{
-private:
-	class Expr* lhs;
-	class Expr* rhs;
-	string opr;
-public:
-	binExpr(class Expr*, string, class Expr*);
-	void traverse();
-};
-
-class Location:public Expr{
-private:
-	string var;
-	string location_type;
-	class Expr* expr;
-public:
-	Location(string,string,class Expr*);
-	Location(string,string);
-	void traverse();
-	string getVar();
-	bool is_array();
-	class Expr* getExpr();
-};
-
-class Literal:public Expr{
-protected:
-	literalType ltype;
-public:
-	virtual void traverse(){}
-	virtual int getValue(){}
-	virtual string toString(){}
-};
-
-class intLiteral:public Literal{
-private:
-	int value;
-public:
-	intLiteral(int);
-	void traverse();
-	int getValue();
-	string toString();
-};
-
-class boolLiteral:public Literal{
-private:
-	string value;
-public:
-	boolLiteral(string);
-	void traverse();
-	string toString();
-};
-
-class charLiteral:public Literal{
-private:
-	char value;
-public:
-	charLiteral(string);
-	void traverse();
-};
-
-class stringLiteral:public Literal{
-private:
-	string value;
-public:
-	stringLiteral(string);
-	void traverse();
-};
-
-class Stmt{
-public:
-	virtual void traverse(){}
-};
-
-class Stmts{
-private:
-	vector<class Stmt*> stmts;
-	int cnt;
-public:
-	Stmts();
-	void push_back(class Stmt*);
-	void traverse();
-};
-class methodCall:public Stmt,public Expr{
-protected:
-	string method_name;
-public:
-	virtual void traverse(){}
-};
-
-class calloutCall:public methodCall{
-private:
-	class calloutArgs* args;
-public:
-	calloutCall(string, class calloutArgs*);
-	void traverse();
-};
-
-class Method:public methodCall{
-private:
-	class Params* params;
-public:
-	Method(string, class Params*);
-	void traverse();
-};
-
-class Params{
-private:
-	vector<class Expr*> expr_list;
-	int cnt;
-public:
-	Params();
-	void push_back(class Expr*);
-	void traverse();
-};
-
-class calloutArg{
-private:
-	class Expr* expr;
-public:
-	calloutArg(class Expr*);
-	calloutArg(string literal);
-	void traverse();
-};
-
-class calloutArgs{
-private:
-	vector<class calloutArg*> args_list;
-	int cnt;
-public:
-	calloutArgs();
-	void traverse();
-	void push_back(class calloutArg*);
-};
-
-
-class Assignment:public Stmt{
-private:
-	class Location* loc;
-	class Expr* expr;
-	string opr;
-public:
-	Assignment(class Location*, string, class Expr*);
-	void traverse();
-};
-
-class Block:public Stmt{
-private:
-	class varDecls* decls_list;
-	class Stmts* stmts_list;
-public:
-	Block(class varDecls*,class Stmts*);
-	void traverse();
-};
-
-class varDecl{
-private:
-	string type;
-	vector<string> var_list;
-	int cnt;
-public:
-	varDecl(string,class stringList*);
-	void push_back(string);
-	void traverse();
-};
-
-class stringList{
-private:
-	vector<string> list;
-public:
-	stringList(){}
-	void push_back(string);
-	vector<string> getList();
-};
-class varDecls{
-private:
-	vector<class varDecl*> decl_list;
-	int cnt;
-public:
-	varDecls();
-	void push_back(class varDecl*);
-	void traverse();
-};
-
-class forStmt:public Stmt{
-private:
-	string var;
-	class Expr* init;
-	class Expr* condition;
-	class Block* body;
-public:
-	forStmt(string, class Expr*, class Expr*, class Block*);
-	void traverse();
-};
-
-class ifElseStmt:public Stmt{
-private:
-	class Expr* condition;
-	class Block* if_block;
-	class Block* else_block;
-public:
-	ifElseStmt(class Expr*, class Block*, class Block*);
-	void traverse();
-};
-
-class returnStmt:public Stmt{
-private:
-	class Expr* ret;
-public:
-	returnStmt(class Expr*);
-	void traverse();
-};
-
-class breakStmt:public Stmt{
-public:
-	breakStmt(){}
-	void traverse();
-};
-
-class continueStmt:public Stmt{
-public:
-	continueStmt(){}
-	void traverse();
-};
-
-class methodDecl{
-private:
-	string type;
-	string name;
-	class methodArgs* arg_list;
-	class Block* body;
-public:
-	methodDecl(string type, string name, class methodArgs*, class Block*);
-	void traverse();
-};
-
-class methodDecls{
-private:
-	vector< class methodDecl* > decl_list;
-	int cnt;
-public:
-	methodDecls();
-	void push_back(class methodDecl*);
-	void traverse();
-};
-
-class methodArgs{
-private:
-	vector<class methodArg*> arg_list;
-	int cnt;
-public:
-	methodArgs();
-	void push_back(class methodArg*);
-	void traverse();
-};
-
-class methodArg{
-private:
-	string type;
-	string name;
-public:
-	methodArg(string,string);
-	void traverse();
-};
-
-class Prog{
-private:
-	string name;
-	class methodDecls* methods;
-	class fieldDecls* fields;
-public:
-	Prog(string name,class fieldDecls*,class methodDecls*);
-	void traverse();
-};
+#endif
