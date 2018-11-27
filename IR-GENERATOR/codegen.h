@@ -430,8 +430,7 @@ public:
         }
         if (function->getReturnType()->isVoidTy()) 
         {
-            // use NULL or empty string
-            return llvm::CallInst::Create(function, llvm::makeArrayRef(args), NULL, table.topBlock());    
+            return llvm::CallInst::Create(function, llvm::makeArrayRef(args), "", table.topBlock());    
         }
         return llvm::CallInst::Create(function, llvm::makeArrayRef(args), node->getId(), table.topBlock());
     }
