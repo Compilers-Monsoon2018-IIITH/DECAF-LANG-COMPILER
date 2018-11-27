@@ -1,30 +1,29 @@
-Class Program
+class Program
 {
-	bool prime(int n)
+	boolean prime(int n)
 	{
 		int i;
 		for i=2,n-1
 		{
 			if(n%i==0)
 			{
-				return False;
+				return false;
 			}
 		}
-		return True;
+		return true;
 	}
 	int main()
 	{
 		int n;
-		callout("scanf","%d",&n);
-		bool ans;
-		ans=callout(prime,n);
-		if(ans)
+		boolean ans;
+		ans=prime(n);
+		if(ans==true)
 		{
-			callout("printf","NUMBER IS PRIME");
+			callout("printf", "NUMBER IS PRIME\n");
 		}
 		else
 		{
-			callout("printf","NUMBER IS NOT PRIME");
+			callout("printf", "NUMBER IS NOT PRIME\n");
 		}
 		return 0;
 	}

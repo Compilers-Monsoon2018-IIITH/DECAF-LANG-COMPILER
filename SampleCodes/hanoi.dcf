@@ -1,30 +1,28 @@
-Class Program
+class Program
 {
-	void hanoi(int n,char from,char to,char aux)
+	void hanoi(int n, int from, int to, int aux)
 	{
-		if(n==1)
+		if (n==1)
 		{
-			callout("printf","From %c to %c",from,to);
+			callout("printf", "From %c to %c\n", from, to);
 		}
 		else
 		{
-			callout("hanoi",n-1,from,aux,to);
-			callout("printf","Move %d from %c from to %c aux",n,from,to);
-			callout("hanoi",n-1,aux,to,from);
+			hanoi(n-1, from, aux, to);
+			callout("printf","Move %d from %c from to %c aux\n", n, from, to);
+			hanoi(n-1, aux, to, from);
 		}
 		return;
 	}
 	int main()
 	{
 		int n;
-		callout("scanf","%d",&n);
-		char f;
+		int f,a,t;
 		f='A';
-		char t;
 		t='B';
-		char a;
-		a='C'
-		callout("hanoi",n,f,t,a);
+		a='C';
+		n=10;
+		hanoi(n,f,t,a);
 		return 0;
 	}
 }

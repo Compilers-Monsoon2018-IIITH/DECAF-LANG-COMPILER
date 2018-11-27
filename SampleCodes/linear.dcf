@@ -1,36 +1,40 @@
-Class Program
+class Program
 {
-	int linear(int elem, int arr[], int size)
+	int arr[10];
+	boolean linear(int elem, int size)
 	{
 		int i;
-		for i=0,size-1
+		for i=0,size
 		{
 			if(arr[i]==elem)
 			{
-				return True;
+				return true;
 			}
+			i+=1;
 		}
-		return False;
+		return false;
 	}
 	int main()
 	{
 		int n;
 		int m;
-		callout("scanf","%d %d",n,m);
-		int arr[n];
-		for i=0,n-1
+		int i;
+		boolean f;
+		n=10;
+		for i=0,n
 		{
-			callout("scanf","%d",&arr[i]);
+			arr[i]=i;
+			i+=1;
 		}
-		bool f;
-		f=callout("linear",m,arr,n);
+		m=3;
+		f=linear(m,n);
 		if(f)
 		{
-			callout("printf","ELEMENT FOUND");
+			callout("printf","ELEMENT FOUND\n");
 		}
 		else
 		{
-			callout("printf","ELEMENT NOT FOUND");
+			callout("printf","ELEMENT NOT FOUND\n");
 		}
 		return 0;
 	}
