@@ -4,10 +4,10 @@ DECAF COMPILER
 + The repository has been version tagged for ease of understanding
 
 1. Directory structure
-  + Sample codes: Contains sample decaf files to test on
-  + C: Contains parser for semnatic analysis
-  + C_AST: Contains AST generation/Postfix notation in C
-  + CPP: Contains IR Generation in CPP using  C++ API
+  + SampleCodes: Contains sample decaf files to test on
+  + SCANNER-PARSER: Contains parser for semnatic analysis
+  + AST-CONSTRUCTION: Contains AST generation/Postfix notation in C
+  + IR-GENERATOR: Contains IR Generation in CPP using  C++ API
 
 2. How to run it
   + make
